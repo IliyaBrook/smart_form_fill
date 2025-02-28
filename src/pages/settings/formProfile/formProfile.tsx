@@ -148,76 +148,30 @@ const FormProfile = () => {
 	};
 	
 	const handleProfileItemChange = (key: string, field: 'name' | 'value' | 'type', value: string | 'text' | 'file') => {
-		formProfileStorage.set((prev) => {
-			const currentProfile = prev.profiles[prev.activeProfile];
-			let updatedProfileEntry: any
-			
-			if (field === 'name') {
-				const newName = value;
-				const oldKey = key;
-				if (newName && newName !== oldKey) {
-					updatedProfileEntry = currentProfile[oldKey];
-					delete prev.profiles[prev.activeProfile][oldKey];
-					prev.profiles[prev.activeProfile][newName] = updatedProfileEntry;
-					prev.profiles[prev.activeProfile][newName].name = newName;
-				} else {
-					updatedProfileEntry = currentProfile[oldKey];
-					prev.profiles[prev.activeProfile][oldKey] = updatedProfileEntry;
-				}
-				
-				
-			} else {
-				updatedProfileEntry = {
-					...currentProfile[key],
-					[field]: value,
-				};
-				prev.profiles[prev.activeProfile][key] = updatedProfileEntry;
-			}
-			
-			
-			return {
-				...prev,
-				profiles: prev.profiles, // Исправлено: возвращаем prev.profiles
-			};
-		});
+		formProfileStorage.set((prev) => ({
+			...prev,
+			profiles: {
+				...prev.profiles,
+				[prev.activeProfile]: {
+					...prev.profiles[prev.activeProfile],
+					[key]: {
+						...prev.profiles[prev.activeProfile][key],
+						[field]: value,
+					},
+				},
+			},
+		}));
 	};
 	
-	// const handleFileUpload = (info: any, key: string) => {
-	// 	console.log("handleFileUpload info:", info)
-	// 	console.log("handleFileUpload key:", key)
-	//
-	//
-	// 	if (info.file.status === 'done') {
-	// 		const reader = new FileReader();
-	// 		reader.onload = (e: any) => {
-	// 			console.log("handleFileUpload result:", e.target.result.split(',')[1])
-	// 			formProfileStorage.set((prev) => ({
-	// 				...prev,
-	// 				profiles: {
-	// 					...prev.profiles,
-	// 					[prev.activeProfile]: {
-	// 						...prev.profiles[prev.activeProfile],
-	// 						[key]: {
-	// 							...prev.profiles[prev.activeProfile][key],
-	// 							file: {
-	// 								name: info.file.name,
-	// 								content: e.target.result.split(',')[1],
-	// 							},
-	// 						},
-	// 					},
-	// 				},
-	// 			}));
-	// 			message.success(`${info.file.name} file uploaded successfully`);
-	// 		};
-	// 		reader.readAsDataURL(info.file.originFileObj);
-	// 	} else if (info.file.status === 'error') {
-	// 		message.error(`${info.file.name} file upload failed.`);
-	// 	}
-	// };
 	const handleFileUpload = (info: any, key: string) => {
+		console.log("handleFileUpload info:", info)
+		console.log("handleFileUpload key:", key)
+		
+		
 		if (info.file.status === 'done') {
 			const reader = new FileReader();
 			reader.onload = (e: any) => {
+				console.log("handleFileUpload result:", e.target.result.split(',')[1])
 				formProfileStorage.set((prev) => ({
 					...prev,
 					profiles: {
@@ -226,11 +180,11 @@ const FormProfile = () => {
 							...prev.profiles[prev.activeProfile],
 							[key]: {
 								...prev.profiles[prev.activeProfile][key],
-								value: { //  Изменено: сохраняем в value
+								value: {
 									name: info.file.name,
 									content: e.target.result.split(',')[1],
 								},
-								type: 'file', //  Убедитесь, что тип установлен как 'file'
+								type: 'file',
 							},
 						},
 					},
@@ -347,36 +301,36 @@ const FormProfile = () => {
 		value: currentProfile[key].value,
 	}));
 	
-	// useEffect(() => {
-	// 	if (!isReady) return;
-	// 	if (Object.keys(currentProfile).length !== 0) {
-	// 		const emptyFields = findKeysByValue(currentProfile, '');
-	// 		if (emptyFields.length > 0) {
-	// 			formProfileStorage.set((prev) => {
-	// 				const updatedProfiles = { ...prev.profiles };
-	// 				emptyFields.forEach((key) => {
-	// 					delete updatedProfiles[prev.activeProfile][key];
-	// 				});
-	// 				return {
-	// 					...prev,
-	// 					profiles: {
-	// 						...updatedProfiles,
-	// 					},
-	// 				};
-	// 			});
-	// 		}
-	// 		const { uniqueObject, duplicateKeys } = findAndGroupDuplicates(currentProfile, (item) => item.name);
-	// 		if (duplicateKeys.length > 0) {
-	// 			formProfileStorage.set(prev => ({
-	// 				...prev,
-	// 				profiles: {
-	// 					...prev.profiles,
-	// 					[prev.activeProfile]: uniqueObject
-	// 				}
-	// 			}))
-	// 		}
-	// 	}
-	// }, [currentProfile, profiles, activeProfile, isReady]);
+	useEffect(() => {
+		if (!isReady) return;
+		if (Object.keys(currentProfile).length !== 0) {
+			const emptyFields = findKeysByValue(currentProfile, '');
+			if (emptyFields.length > 0) {
+				formProfileStorage.set((prev) => {
+					const updatedProfiles = { ...prev.profiles };
+					emptyFields.forEach((key) => {
+						delete updatedProfiles[prev.activeProfile][key];
+					});
+					return {
+						...prev,
+						profiles: {
+							...updatedProfiles,
+						},
+					};
+				});
+			}
+			const { uniqueObject, duplicateKeys } = findAndGroupDuplicates(currentProfile, (item) => item.name);
+			if (duplicateKeys.length > 0) {
+				formProfileStorage.set(prev => ({
+					...prev,
+					profiles: {
+						...prev.profiles,
+						[prev.activeProfile]: uniqueObject
+					}
+				}))
+			}
+		}
+	}, [currentProfile, profiles, activeProfile, isReady]);
 	
 	return (
 		<div>
