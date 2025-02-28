@@ -146,28 +146,46 @@ const FormProfile = () => {
 		}));
 		setNewProfileName('');
 	};
-	
-	const handleProfileItemChange = (key: string, field: 'name' | 'value' | 'type', value: string | 'text' | 'file') => {
-		formProfileStorage.set((prev) => ({
-			...prev,
-			profiles: {
-				...prev.profiles,
-				[prev.activeProfile]: {
-					...prev.profiles[prev.activeProfile],
-					[key]: {
-						...prev.profiles[prev.activeProfile][key],
-						[field]: value,
+	const handleProfileItemChange = (
+		key: string,
+		field: 'name' | 'value' | 'type',
+		value: string
+	) => {
+		formProfileStorage.set((prev) => {
+			const profile = prev.profiles[prev.activeProfile];
+
+			if (field === 'name') {
+				const updatedItem = { ...profile[key], name: value };
+				const { [key]: removed, ...rest } = profile;
+				return {
+					...prev,
+					profiles: {
+						...prev.profiles,
+						[prev.activeProfile]: {
+							...rest,
+							[value]: updatedItem,
+						},
+					},
+				};
+			}
+
+			return {
+				...prev,
+				profiles: {
+					...prev.profiles,
+					[prev.activeProfile]: {
+						...profile,
+						[key]: {
+							...profile[key],
+							[field]: value,
+						},
 					},
 				},
-			},
-		}));
+			};
+		});
 	};
 	
 	const handleFileUpload = (info: any, key: string) => {
-		console.log("handleFileUpload info:", info)
-		console.log("handleFileUpload key:", key)
-		
-		
 		if (info.file.status === 'done') {
 			const reader = new FileReader();
 			reader.onload = (e: any) => {
@@ -231,9 +249,12 @@ const FormProfile = () => {
 			key: 'name',
 			render: (_, record) => (
 				<Input
-					value={record.name}
-					onChange={(e) => handleProfileItemChange(record.key, 'name', e.target.value)}
-					onBlur={(event) => onRuleNameCheckDuplicates(event, record)}
+					defaultValue={record.name}
+					// onChange={(e) => handleProfileItemChange(record.key, 'name', e.target.value)}
+					onBlur={(event) => {
+						handleProfileItemChange(record.key, 'name', event.target.value)
+						onRuleNameCheckDuplicates(event, record)
+					}}
 				/>
 			),
 		},
@@ -297,7 +318,7 @@ const FormProfile = () => {
 	const tableData = Object.keys(currentProfile).map((key) => ({
 		key,
 		name: currentProfile[key].name,
-		type: currentProfile[key].type, // Added type to tableData
+		type: currentProfile[key].type,
 		value: currentProfile[key].value,
 	}));
 	
@@ -373,7 +394,11 @@ const FormProfile = () => {
 				</div>
 			</div>
 			<div>
-				<Table columns={columns} dataSource={tableData} pagination={false} />
+				<Table
+					columns={columns}
+					dataSource={tableData}
+					pagination={false}
+				/>
 				<DefaultProfileTooltip isDefaultProfile={isDefaultProfile}>
 					<Button onClick={handleAddValue} disabled={isDefaultProfile}>Add a new Value</Button>
 				</DefaultProfileTooltip>

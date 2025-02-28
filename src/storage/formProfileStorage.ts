@@ -47,17 +47,17 @@ const formProfileStorage = createStorage<FormProfilesData>(
 					if (typeof parsed !== 'object' || parsed === null) {
 						return initialData;
 					}
-					
+
 					const requiredKeys: (keyof FormProfilesData)[] = [
 						'profiles',
 						'profileNames',
 						'activeProfile',
 					];
-					
+
 					if (!requiredKeys.every((key) => key in parsed)) {
 						return initialData;
 					}
-					
+
 					return parsed;
 				} catch {
 					return initialData;
