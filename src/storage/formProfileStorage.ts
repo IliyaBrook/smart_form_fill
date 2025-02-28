@@ -15,6 +15,7 @@ export interface FormProfilesData {
 	profiles: { [key: string]: Profile };
 	profileNames: string[];
 	currentProfileName: string;
+	activeProfile:string;
 }
 const transformProfile = (profile: any): Profile => {
 	const transformedProfile: Profile = {};
@@ -30,6 +31,7 @@ const initialData: FormProfilesData = {
 	},
 	profileNames: ['default'],
 	currentProfileName: 'default',
+	activeProfile:'default'
 };
 
 const formProfileStorage = createStorage<FormProfilesData>(
@@ -46,17 +48,27 @@ const formProfileStorage = createStorage<FormProfilesData>(
 				if (!str) return initialData;
 				try {
 					const parsed = JSON.parse(str);
-					if (typeof parsed !== 'object' || parsed === null ||
-						!('profiles' in parsed) || !('profileNames' in parsed) || !('currentProfileName' in parsed)) {
+					if (typeof parsed !== 'object' || parsed === null) {
 						return initialData;
 					}
+					
+					const requiredKeys: (keyof FormProfilesData)[] = [
+						'profiles',
+						'profileNames',
+						'currentProfileName',
+						'activeProfile',
+					];
+					
+					if (!requiredKeys.every((key) => key in parsed)) {
+						return initialData;
+					}
+					
 					return parsed;
 				} catch {
 					return initialData;
 				}
 			},
-		}
-		
+		},
 	}
 );
 

@@ -36,7 +36,6 @@ const Img: React.FC<IImg> = ({
 		}
 	}
 	const imageSrc = getSrc()
-	console.log("image src:", imageSrc)
 	
 	return (
 		<img

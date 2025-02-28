@@ -5,6 +5,7 @@ import { themeStorage } from '@src/storage'
 import formProfileStorage from '@src/storage/formProfileStorage'
 import type { Theme } from '@src/types/storage'
 import { cn } from '@src/utils/cn'
+import { navigateToTab, navigateToUrl } from '@src/utils/navigateUtils'
 import { Button, Divider, Select, Space } from 'antd'
 import React from 'react'
 
@@ -13,27 +14,19 @@ const Popup = () => {
 	const theme: Theme = useStorage(themeStorage)
 	const isLight = theme === 'light'
 	
-	const { profiles, profileNames, currentProfileName } = useStorage(formProfileStorage);
-	console.log("profiles", profiles)
-	console.log("profileNames", profileNames)
-	console.log("currentProfileName", currentProfileName)
+	const { profiles, profileNames, currentProfileName, activeProfile } = useStorage(formProfileStorage);
+	console.log("profiles: ", profiles)
+	console.log("profileNames: ", profileNames)
+	console.log("currentProfileName: ", currentProfileName)
+	console.log("activeProfile: ", activeProfile)
 	
-	const profileSelectOptions = [
-		{
-			value: 'jack',
-			label: 'Jack',
-		},
-		{
-			value: 'lucy',
-			label: 'Lucy',
-		},
-		{
-			value: 'tom',
-			label: 'Tom',
-		},
-	]
-	const onSearchProfile = (value: string) => {}
-	const onChangeProfile = (value: string) => {}
+	const profileSelectOptions = profileNames.map(profile => ({label: profile, value: profile}))
+	const onChangeProfile = (value: string) => {
+		formProfileStorage.set(prev => ({
+			...prev,
+			activeProfile: value
+		}));
+	}
 	
 	return (
 		<div
@@ -48,7 +41,7 @@ const Popup = () => {
 					<ThemeToggleButton theme={theme} />
 					<Button
 						type="default"
-						onClick={() => {}}
+						onClick={() => navigateToUrl("https://github.com/IliyaBrook/smart_form_fill/blob/master/README.md")}
 						icon={<Img
 							theme={theme}
 							alt="info"
@@ -58,13 +51,7 @@ const Popup = () => {
 					/>
 					<Button
 						type="default"
-						onClick={() => {
-							window.open(
-								"https://github.com/IliyaBrook/smart_form_fill/issues",
-								"_blank",
-								"noopener,noreferrer"
-							);
-						}}
+						onClick={() => navigateToUrl("https://github.com/IliyaBrook/smart_form_fill/issues")}
 						icon={<Img
 							theme={theme}
 							alt="bug"
@@ -76,11 +63,7 @@ const Popup = () => {
 				<div>
 					<Button
 						type="default"
-						onClick={() => {
-							chrome.tabs.create({
-								url: 'src/pages/settings/index.html'
-							})
-						}}
+						onClick={() => navigateToTab('src/pages/settings/index.html')}
 						icon={<Img
 							theme={theme}
 							alt="info"
@@ -98,8 +81,8 @@ const Popup = () => {
 						placeholder="Select Profile"
 						optionFilterProp="label"
 						onChange={onChangeProfile}
-						onSearch={onSearchProfile}
 						options={profileSelectOptions}
+						defaultValue={activeProfile}
 					/>
 				</div>
 			</header>
