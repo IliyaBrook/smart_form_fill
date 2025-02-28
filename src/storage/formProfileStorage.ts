@@ -1,32 +1,31 @@
-import { createStorage } from '@src/storage/base';
-import { StorageEnum } from '@src/types/storage';
-import defaultProfileData from '@pages/settings/formProfile/defaultProfile.json'; // Импортируем defaultProfileData
+import defaultProfileData from '@pages/settings/formProfile/defaultProfile.json'
+import { createStorage } from '@src/storage/base'
+import type { FileTypes, FormProfilesData, Profile, ProfileItem } from '@src/types/formProfileStorage'
+import { StorageEnum } from '@src/types/storage'
 
-export interface ProfileItem {
-	name: string;
-	value: string;
+function convertType(type: string): FileTypes {
+	if (type === 'text' || type === 'file') {
+		return type;
+	} else {
+		return 'text';
+	}
 }
 
-export interface Profile {
-	[key: string]: ProfileItem;
-}
-
-export interface FormProfilesData {
-	profiles: { [key: string]: Profile };
-	profileNames: string[];
-	activeProfile:string;
-}
-const transformProfile = (profile: any): Profile => {
+const transformProfile = (profile: Record<string, ProfileItem>): Profile => {
 	const transformedProfile: Profile = {};
 	Object.entries(profile).forEach(([key, value]) => {
-		transformedProfile[key] = { name: key, value: String(value) };
+		transformedProfile[key] = {
+			name: key,
+			value: convertType(value.type),
+			type: value.type as FileTypes
+		};
 	});
 	return transformedProfile;
 };
 
 const initialData: FormProfilesData = {
 	profiles: {
-		default: transformProfile(defaultProfileData)
+		default: transformProfile(defaultProfileData as Record<string, ProfileItem>)
 	},
 	profileNames: ['default'],
 	activeProfile:'default'

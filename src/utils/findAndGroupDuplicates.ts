@@ -1,34 +1,30 @@
-interface ProfileField {
-	name: string;
-	value: string;
-}
-
-interface Profile {
-	[key: string]: ProfileField;
-}
-
-interface FindDuplicatesResult {
-	uniqueObject: { [key: string]: ProfileField };
+interface FindDuplicatesResult<T> {
+	uniqueObjects: Record<string, T>;
 	duplicateKeys: string[];
+	duplicates: Record<string, T[]>;
 }
 
-function findAndGroupDuplicates(profile: Profile): FindDuplicatesResult {
-	const uniqueObject: { [key: string]: ProfileField } = {};
-	const duplicates: { [key: string]: ProfileField[] } = {};
+function findAndGroupDuplicates<T>(
+	object: Record<string, T>,
+	keyExtractor: (item: T) => string
+): FindDuplicatesResult<T> {
+	const uniqueObjects: Record<string, T> = {};
+	const duplicates: Record<string, T[]> = {};
 	
-	Object.values(profile).forEach((item) => {
-		const key = item.name.toLowerCase();
-		if (uniqueObject[key]) {
+	Object.values(object).forEach((item) => {
+		const key = keyExtractor(item).toLowerCase();
+		
+		if (uniqueObjects[key]) {
 			if (!duplicates[key]) {
-				duplicates[key] = [uniqueObject[key]];
+				duplicates[key] = [uniqueObjects[key]];
 			}
 			duplicates[key].push(item);
 		} else {
-			uniqueObject[key] = item;
+			uniqueObjects[key] = item;
 		}
 	});
 	
-	return { uniqueObject, duplicateKeys: Object.keys(duplicates) };
+	return { uniqueObjects, duplicateKeys: Object.keys(duplicates), duplicates };
 }
 
 export default findAndGroupDuplicates;

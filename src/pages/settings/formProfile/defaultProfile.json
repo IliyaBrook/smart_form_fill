@@ -1,33 +1,157 @@
 {
-	"user-name": "my-user-name",
-	"email": "me@mydomain.com",
-	"title": "Mr.",
-	"gender": "male",
-	"age": "30",
-	"first-name": "my first name",
-	"middle-name": "my middle name",
-	"last-name": "my last name",
-	"name-suffix": "my name suffix",
-	"full-name": "my full name",
-	"street-line-1": "street address line number one",
-	"street-line-2": "street address line number two",
-	"street-line-3": "street address line number three",
-	"full-street": "full street address",
-	"city": "city name",
-	"state": "state name",
-	"zip-code": "zip code or postal code",
-	"country-code": "US",
-	"country": "country name",
-	"lang": "language",
-	"birth-day-type-1": "1",
-	"birth-day-type-2": "01",
-	"birth-month-number-type-1": "1",
-	"birth-month-number-type-2": "01",
-	"birth-month-string": "January",
-	"birth-year": "1971",
-	"company": "company name",
-	"occupation": "occupation",
-	"phone": "(123) 456-7890",
-	"homepage": "http://my-home-page.com",
-	"comment": "this is a comment"
+	"user-name": {
+		"name": "user-name",
+		"value": "my-user-name",
+		"type": "text"
+	},
+	"email": {
+		"name": "email",
+		"value": "me@mydomain.com",
+		"type": "text"
+	},
+	"title": {
+		"name": "title",
+		"value": "Mr.",
+		"type": "text"
+	},
+	"gender": {
+		"name": "gender",
+		"value": "male",
+		"type": "text"
+	},
+	"age": {
+		"name": "age",
+		"value": "30",
+		"type": "text"
+	},
+	"first-name": {
+		"name": "first-name",
+		"value": "my first name",
+		"type": "text"
+	},
+	"middle-name": {
+		"name": "middle-name",
+		"value": "my middle name",
+		"type": "text"
+	},
+	"last-name": {
+		"name": "last-name",
+		"value": "my last name",
+		"type": "text"
+	},
+	"name-suffix": {
+		"name": "name-suffix",
+		"value": "my name suffix",
+		"type": "text"
+	},
+	"full-name": {
+		"name": "full-name",
+		"value": "my full name",
+		"type": "text"
+	},
+	"street-line-1": {
+		"name": "street-line-1",
+		"value": "street address line number one",
+		"type": "text"
+	},
+	"street-line-2": {
+		"name": "street-line-2",
+		"value": "street address line number two",
+		"type": "text"
+	},
+	"street-line-3": {
+		"name": "street-line-3",
+		"value": "street address line number three",
+		"type": "text"
+	},
+	"full-street": {
+		"name": "full-street",
+		"value": "full street address",
+		"type": "text"
+	},
+	"city": {
+		"name": "city",
+		"value": "city name",
+		"type": "text"
+	},
+	"state": {
+		"name": "state",
+		"value": "state name",
+		"type": "text"
+	},
+	"zip-code": {
+		"name": "zip-code",
+		"value": "zip code or postal code",
+		"type": "text"
+	},
+	"country-code": {
+		"name": "country-code",
+		"value": "US",
+		"type": "text"
+	},
+	"country": {
+		"name": "country",
+		"value": "country name",
+		"type": "text"
+	},
+	"lang": {
+		"name": "lang",
+		"value": "language",
+		"type": "text"
+	},
+	"birth-day-type-1": {
+		"name": "birth-day-type-1",
+		"value": "1",
+		"type": "text"
+	},
+	"birth-day-type-2": {
+		"name": "birth-day-type-2",
+		"value": "01",
+		"type": "text"
+	},
+	"birth-month-number-type-1": {
+		"name": "birth-month-number-type-1",
+		"value": "1",
+		"type": "text"
+	},
+	"birth-month-number-type-2": {
+		"name": "birth-month-number-type-2",
+		"value": "01",
+		"type": "text"
+	},
+	"birth-month-string": {
+		"name": "birth-month-string",
+		"value": "January",
+		"type": "text"
+	},
+	"birth-year": {
+		"name": "birth-year",
+		"value": "1971",
+		"type": "text"
+	},
+	"company": {
+		"name": "company",
+		"value": "company name",
+		"type": "text"
+	},
+	"occupation": {
+		"name": "occupation",
+		"value": "occupation",
+		"type": "text"
+	},
+	"phone": {
+		"name": "phone",
+		"value": "(123) 456-7890",
+		"type": "text"
+	},
+	"homepage": {
+		"name": "homepage",
+		"value": "http://my-home-page.com",
+		"type": "text"
+	},
+	"comment": {
+		"name": "comment",
+		"value": "this is a comment",
+		"type": "text"
+	}
 }
