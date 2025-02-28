@@ -9,9 +9,9 @@ import React, { useEffect, useState } from 'react'
 import Swal from 'sweetalert2'
 
 const FormProfile = () => {
-	const { profiles, profileNames, currentProfileName } = useStorage(formProfileStorage);
+	const { profiles, profileNames, activeProfile } = useStorage(formProfileStorage);
 	const [newProfileName, setNewProfileName] = useState<string>('');
-	const isDefaultProfile = currentProfileName === 'default';
+	const isDefaultProfile = activeProfile === 'default';
 	const [isReady, setIsReady] = useState(false);
 	
 	useEffect(() => {
@@ -20,13 +20,13 @@ const FormProfile = () => {
 		}, 1000)
 	}, [])
 	
-	const currentProfile = profiles[currentProfileName] ?? {};
+	const currentProfile = profiles[activeProfile] ?? {};
 	
 	
 	const handleProfileChange = (value: string) => {
 		formProfileStorage.set(prev => ({
 			...prev,
-			currentProfileName: value,
+			activeProfile: value,
 		}));
 	};
 	
@@ -38,8 +38,8 @@ const FormProfile = () => {
 					...currentData,
 					profiles: {
 						...currentData.profiles,
-						[currentData.currentProfileName]: {
-							...currentData.profiles[currentData.currentProfileName],
+						[currentData.activeProfile]: {
+							...currentData.profiles[currentData.activeProfile],
 							[`newKey_${Date.now()}`]: { name: '', value: '' },
 						},
 					},
@@ -49,20 +49,20 @@ const FormProfile = () => {
 	
 	const handleDeleteRow = (key: string) => {
 		formProfileStorage.set(prev => {
-			const newProfile = { ...prev.profiles[prev.currentProfileName] };
+			const newProfile = { ...prev.profiles[prev.activeProfile] };
 			delete newProfile[key];
 			return {
 				...prev,
 				profiles: {
 					...prev.profiles,
-					[prev.currentProfileName]: newProfile,
+					[prev.activeProfile]: newProfile,
 				},
 			};
 		});
 	};
 	
 	const handleDuplicateProfile = () => {
-		const newName = `${currentProfileName} (copy)`;
+		const newName = `${activeProfile} (copy)`;
 		if (profileNames.includes(newName)) {
 			Swal.fire({
 				icon: 'warning',
@@ -77,23 +77,23 @@ const FormProfile = () => {
 			profileNames: [...prev.profileNames, newName],
 			profiles: {
 				...prev.profiles,
-				[newName]: { ...prev.profiles[prev.currentProfileName] },
+				[newName]: { ...prev.profiles[prev.activeProfile] },
 			},
-			currentProfileName: newName,
+			activeProfile: newName,
 		}));
 	};
 	
 	const handleDeleteProfile = () => {
-		if (currentProfileName === 'default') return;
+		if (activeProfile === 'default') return;
 		
 		formProfileStorage.set(prev => {
 			const newProfiles = { ...prev.profiles };
-			delete newProfiles[prev.currentProfileName];
+			delete newProfiles[prev.activeProfile];
 			return {
 				...prev,
-				profileNames: prev.profileNames.filter(name => name !== prev.currentProfileName),
+				profileNames: prev.profileNames.filter(name => name !== prev.activeProfile),
 				profiles: newProfiles,
-				currentProfileName: 'default',
+				activeProfile: 'default',
 			};
 		});
 	};
@@ -110,13 +110,13 @@ const FormProfile = () => {
 		}
 		
 		formProfileStorage.set(prev => {
-			const newProfiles = { ...prev.profiles, [newProfileName]: prev.profiles[prev.currentProfileName] };
-			delete newProfiles[prev.currentProfileName];
+			const newProfiles = { ...prev.profiles, [newProfileName]: prev.profiles[prev.activeProfile] };
+			delete newProfiles[prev.activeProfile];
 			return {
 				...prev,
 				profiles: newProfiles,
-				profileNames: prev.profileNames.map(name => name === prev.currentProfileName ? newProfileName : name),
-				currentProfileName: newProfileName,
+				profileNames: prev.profileNames.map(name => name === prev.activeProfile ? newProfileName : name),
+				activeProfile: newProfileName,
 			};
 		});
 		setNewProfileName('');
@@ -140,7 +140,7 @@ const FormProfile = () => {
 				...prev.profiles,
 				[newProfileName]: {},
 			},
-			currentProfileName: newProfileName,
+			activeProfile: newProfileName,
 		}));
 		setNewProfileName('');
 	};
@@ -149,10 +149,10 @@ const FormProfile = () => {
 			...prev,
 			profiles: {
 				...prev.profiles,
-				[prev.currentProfileName]: {
-					...prev.profiles[prev.currentProfileName],
+				[prev.activeProfile]: {
+					...prev.profiles[prev.activeProfile],
 					[key]: {
-						...prev.profiles[prev.currentProfileName][key],
+						...prev.profiles[prev.activeProfile][key],
 						[field]: value,
 					},
 				},
@@ -172,13 +172,13 @@ const FormProfile = () => {
 					'A rule with this name already exists in the current profile. Please choose a different name.',
 			}).then(() => {
 				formProfileStorage.set((prev) => {
-					const updatedProfile = { ...prev.profiles[prev.currentProfileName] };
+					const updatedProfile = { ...prev.profiles[prev.activeProfile] };
 					delete updatedProfile[record.key];
 					return {
 						...prev,
 						profiles: {
 							...prev.profiles,
-							[prev.currentProfileName]: updatedProfile,
+							[prev.activeProfile]: updatedProfile,
 						},
 					};
 				});
@@ -237,7 +237,7 @@ const FormProfile = () => {
 				formProfileStorage.set((prev) => {
 					const updatedProfiles = { ...prev.profiles };
 					emptyFields.forEach((key) => {
-						delete updatedProfiles[prev.currentProfileName][key];
+						delete updatedProfiles[prev.activeProfile][key];
 					});
 					return {
 						...prev,
@@ -253,12 +253,12 @@ const FormProfile = () => {
 					...prev,
 					profiles: {
 						...prev.profiles,
-						[prev.currentProfileName]: uniqueObject
+						[prev.activeProfile]: uniqueObject
 					}
 				}))
 			}
 		}
-	}, [currentProfile, profiles, currentProfileName, isReady]);
+	}, [currentProfile, profiles, activeProfile, isReady]);
 	
 	return (
 		<div>
@@ -267,7 +267,7 @@ const FormProfile = () => {
 					<span className="mr-2">Profile</span>
 					<Select
 						style={{ width: '100%' }}
-						value={currentProfileName}
+						value={activeProfile}
 						onChange={handleProfileChange}
 						options={profileNames.map(name => ({ value: name, label: name }))}
 					/>

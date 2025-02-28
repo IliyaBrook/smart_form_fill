@@ -14,7 +14,6 @@ export interface Profile {
 export interface FormProfilesData {
 	profiles: { [key: string]: Profile };
 	profileNames: string[];
-	currentProfileName: string;
 	activeProfile:string;
 }
 const transformProfile = (profile: any): Profile => {
@@ -30,7 +29,6 @@ const initialData: FormProfilesData = {
 		default: transformProfile(defaultProfileData)
 	},
 	profileNames: ['default'],
-	currentProfileName: 'default',
 	activeProfile:'default'
 };
 
@@ -55,7 +53,6 @@ const formProfileStorage = createStorage<FormProfilesData>(
 					const requiredKeys: (keyof FormProfilesData)[] = [
 						'profiles',
 						'profileNames',
-						'currentProfileName',
 						'activeProfile',
 					];
 					
