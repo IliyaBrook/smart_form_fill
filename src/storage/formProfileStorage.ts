@@ -5,7 +5,7 @@ import { StorageEnum } from '@src/types/storage'
 
 function convertType(type: string): FileTypes {
 	if (type === 'text' || type === 'file') {
-		return type;
+		return type as FileTypes;
 	} else {
 		return 'text';
 	}
@@ -16,13 +16,12 @@ const transformProfile = (profile: Record<string, ProfileItem>): Profile => {
 	Object.entries(profile).forEach(([key, value]) => {
 		transformedProfile[key] = {
 			name: key,
-			value: convertType(value.type),
-			type: value.type as FileTypes
+			value:  value.value,
+			type: convertType(value.type) ,
 		};
 	});
 	return transformedProfile;
 };
-
 const initialData: FormProfilesData = {
 	profiles: {
 		default: transformProfile(defaultProfileData as Record<string, ProfileItem>)

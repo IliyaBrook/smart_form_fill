@@ -1,9 +1,10 @@
+import { UploadOutlined } from '@ant-design/icons'
 import DefaultProfileTooltip from '@pages/settings/formProfile/defaultProfileTooltip'
 import { useStorage } from '@src/hooks'
 import formProfileStorage from '@src/storage/formProfileStorage'
 import findAndGroupDuplicates from '@src/utils/findAndGroupDuplicates'
 import findKeysByValue from '@src/utils/findKeyByValue'
-import { Button, Input, Select, Table } from 'antd'
+import { Button, Input, message, Select, Table, Upload, type UploadProps } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
 import React, { useEffect, useState } from 'react'
 import Swal from 'sweetalert2'
@@ -13,6 +14,7 @@ const FormProfile = () => {
 	const [newProfileName, setNewProfileName] = useState<string>('');
 	const isDefaultProfile = activeProfile === 'default';
 	const [isReady, setIsReady] = useState(false);
+	console.log("profiles: ", profiles)
 	
 	useEffect(() => {
 		setTimeout(() => {
@@ -40,7 +42,7 @@ const FormProfile = () => {
 						...currentData.profiles,
 						[currentData.activeProfile]: {
 							...currentData.profiles[currentData.activeProfile],
-							[`newKey_${Date.now()}`]: { name: '', value: '' },
+							[`newKey_${Date.now()}`]: { name: '', value: '', type: 'text' },
 						},
 					},
 				})
@@ -144,21 +146,103 @@ const FormProfile = () => {
 		}));
 		setNewProfileName('');
 	};
-	const handleProfileItemChange = (key: string, field: 'name' | 'value', value: string) => {
-		formProfileStorage.set((prev) => ({
-			...prev,
-			profiles: {
-				...prev.profiles,
-				[prev.activeProfile]: {
-					...prev.profiles[prev.activeProfile],
-					[key]: {
-						...prev.profiles[prev.activeProfile][key],
-						[field]: value,
-					},
-				},
-			},
-		}));
+	
+	const handleProfileItemChange = (key: string, field: 'name' | 'value' | 'type', value: string | 'text' | 'file') => {
+		formProfileStorage.set((prev) => {
+			const currentProfile = prev.profiles[prev.activeProfile];
+			let updatedProfileEntry: any
+			
+			if (field === 'name') {
+				const newName = value;
+				const oldKey = key;
+				if (newName && newName !== oldKey) {
+					updatedProfileEntry = currentProfile[oldKey];
+					delete prev.profiles[prev.activeProfile][oldKey];
+					prev.profiles[prev.activeProfile][newName] = updatedProfileEntry;
+					prev.profiles[prev.activeProfile][newName].name = newName;
+				} else {
+					updatedProfileEntry = currentProfile[oldKey];
+					prev.profiles[prev.activeProfile][oldKey] = updatedProfileEntry;
+				}
+				
+				
+			} else {
+				updatedProfileEntry = {
+					...currentProfile[key],
+					[field]: value,
+				};
+				prev.profiles[prev.activeProfile][key] = updatedProfileEntry;
+			}
+			
+			
+			return {
+				...prev,
+				profiles: prev.profiles, // Исправлено: возвращаем prev.profiles
+			};
+		});
 	};
+	
+	// const handleFileUpload = (info: any, key: string) => {
+	// 	console.log("handleFileUpload info:", info)
+	// 	console.log("handleFileUpload key:", key)
+	//
+	//
+	// 	if (info.file.status === 'done') {
+	// 		const reader = new FileReader();
+	// 		reader.onload = (e: any) => {
+	// 			console.log("handleFileUpload result:", e.target.result.split(',')[1])
+	// 			formProfileStorage.set((prev) => ({
+	// 				...prev,
+	// 				profiles: {
+	// 					...prev.profiles,
+	// 					[prev.activeProfile]: {
+	// 						...prev.profiles[prev.activeProfile],
+	// 						[key]: {
+	// 							...prev.profiles[prev.activeProfile][key],
+	// 							file: {
+	// 								name: info.file.name,
+	// 								content: e.target.result.split(',')[1],
+	// 							},
+	// 						},
+	// 					},
+	// 				},
+	// 			}));
+	// 			message.success(`${info.file.name} file uploaded successfully`);
+	// 		};
+	// 		reader.readAsDataURL(info.file.originFileObj);
+	// 	} else if (info.file.status === 'error') {
+	// 		message.error(`${info.file.name} file upload failed.`);
+	// 	}
+	// };
+	const handleFileUpload = (info: any, key: string) => {
+		if (info.file.status === 'done') {
+			const reader = new FileReader();
+			reader.onload = (e: any) => {
+				formProfileStorage.set((prev) => ({
+					...prev,
+					profiles: {
+						...prev.profiles,
+						[prev.activeProfile]: {
+							...prev.profiles[prev.activeProfile],
+							[key]: {
+								...prev.profiles[prev.activeProfile][key],
+								value: { //  Изменено: сохраняем в value
+									name: info.file.name,
+									content: e.target.result.split(',')[1],
+								},
+								type: 'file', //  Убедитесь, что тип установлен как 'file'
+							},
+						},
+					},
+				}));
+				message.success(`${info.file.name} file uploaded successfully`);
+			};
+			reader.readAsDataURL(info.file.originFileObj);
+		} else if (info.file.status === 'error') {
+			message.error(`${info.file.name} file upload failed.`);
+		}
+	};
+	
 	const onRuleNameCheckDuplicates = (event: React.FocusEvent, record: any) => {
 		const newName = (event.target as HTMLInputElement).value;
 		const duplicateKey = Object.keys(currentProfile).find(
@@ -200,22 +284,55 @@ const FormProfile = () => {
 			),
 		},
 		{
+			title: 'Rule Type',
+			dataIndex: 'type',
+			key: 'type',
+			render: (_, record) => (
+				<Select
+					value={record.type}
+					onChange={(value) => handleProfileItemChange(record.key, 'type', value)}
+					options={[{ value: 'text', label: 'Text' }, { value: 'file', label: 'File' }]}
+				/>
+			),
+		},
+		{
 			title: 'Rule Value',
 			dataIndex: 'value',
 			key: 'value',
-			render: (_, record) => (
-				<Input
-					value={record.value}
-					onChange={(e) => handleProfileItemChange(record.key, 'value', e.target.value)}
-				/>
-			),
+			render: (_, record) => {
+				if (record.type === 'text') {
+					return (
+						<Input
+							value={typeof record.value === 'string' ? record.value : ''}
+							onChange={(e) => handleProfileItemChange(record.key, 'value', e.target.value)}
+						/>
+					);
+				} else if (record.type === 'file') {
+					const uploadProps: UploadProps = {
+						name: 'file',
+						showUploadList: false,
+						onChange: (info) => handleFileUpload(info, record.key),
+					};
+					return (
+						<div>
+							<Upload {...uploadProps}>
+								<Button icon={<UploadOutlined />}>Upload File</Button>
+							</Upload>
+							{record.value && typeof record.value === 'object' && record.value.name && (
+								<span className="ml-2">{record.value.name}</span>
+							)}
+						</div>
+					);
+				}
+				return null;
+			},
 		},
 		{
 			title: 'Action',
 			key: 'action',
 			render: (_, record) => (
 				<DefaultProfileTooltip isDefaultProfile={isDefaultProfile}>
-					<Button size='small' onClick={() => handleDeleteRow(record.key)} disabled={isDefaultProfile}>
+					<Button size="small" onClick={() => handleDeleteRow(record.key)} disabled={isDefaultProfile}>
 						x
 					</Button>
 				</DefaultProfileTooltip>
@@ -226,39 +343,40 @@ const FormProfile = () => {
 	const tableData = Object.keys(currentProfile).map((key) => ({
 		key,
 		name: currentProfile[key].name,
+		type: currentProfile[key].type, // Added type to tableData
 		value: currentProfile[key].value,
 	}));
 	
-	useEffect(() => {
-		if (!isReady) return;
-		if (Object.keys(currentProfile).length !== 0) {
-			const emptyFields = findKeysByValue(currentProfile, '');
-			if (emptyFields.length > 0) {
-				formProfileStorage.set((prev) => {
-					const updatedProfiles = { ...prev.profiles };
-					emptyFields.forEach((key) => {
-						delete updatedProfiles[prev.activeProfile][key];
-					});
-					return {
-						...prev,
-						profiles: {
-							...updatedProfiles,
-						},
-					};
-				});
-			}
-			const { uniqueObject, duplicateKeys } = findAndGroupDuplicates(currentProfile);
-			if (duplicateKeys.length > 0) {
-				formProfileStorage.set(prev => ({
-					...prev,
-					profiles: {
-						...prev.profiles,
-						[prev.activeProfile]: uniqueObject
-					}
-				}))
-			}
-		}
-	}, [currentProfile, profiles, activeProfile, isReady]);
+	// useEffect(() => {
+	// 	if (!isReady) return;
+	// 	if (Object.keys(currentProfile).length !== 0) {
+	// 		const emptyFields = findKeysByValue(currentProfile, '');
+	// 		if (emptyFields.length > 0) {
+	// 			formProfileStorage.set((prev) => {
+	// 				const updatedProfiles = { ...prev.profiles };
+	// 				emptyFields.forEach((key) => {
+	// 					delete updatedProfiles[prev.activeProfile][key];
+	// 				});
+	// 				return {
+	// 					...prev,
+	// 					profiles: {
+	// 						...updatedProfiles,
+	// 					},
+	// 				};
+	// 			});
+	// 		}
+	// 		const { uniqueObject, duplicateKeys } = findAndGroupDuplicates(currentProfile, (item) => item.name);
+	// 		if (duplicateKeys.length > 0) {
+	// 			formProfileStorage.set(prev => ({
+	// 				...prev,
+	// 				profiles: {
+	// 					...prev.profiles,
+	// 					[prev.activeProfile]: uniqueObject
+	// 				}
+	// 			}))
+	// 		}
+	// 	}
+	// }, [currentProfile, profiles, activeProfile, isReady]);
 	
 	return (
 		<div>
@@ -302,7 +420,9 @@ const FormProfile = () => {
 			</div>
 			<div>
 				<Table columns={columns} dataSource={tableData} pagination={false} />
-				<Button onClick={handleAddValue}>Add a new Value</Button>
+				<DefaultProfileTooltip isDefaultProfile={isDefaultProfile}>
+					<Button onClick={handleAddValue} disabled={isDefaultProfile}>Add a new Value</Button>
+				</DefaultProfileTooltip>
 			</div>
 		</div>
 	);

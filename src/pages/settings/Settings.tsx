@@ -10,7 +10,7 @@ const Settings = () => {
 	
 	return (
 		<ConfigProvider>
-			<div className="px-4">
+			<div className="px-4 py-2">
 				<Tabs
 					defaultActiveKey='2'
 					className='px-4'
