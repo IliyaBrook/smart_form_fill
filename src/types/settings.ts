@@ -15,3 +15,12 @@ export interface FormProfilesData {
 	profileNames: string[];
 	activeProfile: string;
 }
+
+export interface RuleItem {
+	'field-rule': string;
+	'site-rule': string;
+}
+
+export interface RulesData {
+	[key: string]: RuleItem;
+}

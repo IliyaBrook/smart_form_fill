@@ -1,6 +1,6 @@
-import defaultProfileData from '@pages/settings/formProfile/defaultProfile.json'
+import defaultProfileData from '@src/storage/initialData/defaultProfile.json'
 import { createStorage } from '@src/storage/base'
-import type { FileTypes, FormProfilesData, Profile, ProfileItem } from '@src/types/formProfileStorage'
+import type { FileTypes, FormProfilesData, Profile, ProfileItem } from '@src/types/settings'
 import { StorageEnum } from '@src/types/storage'
 
 function convertType(type: string): FileTypes {
