@@ -26,10 +26,6 @@ const formRules = () => {
 		['field-rule']: rulesData[key]['field-rule']
 	}))
 	
-	console.log('tableData: ', tableData)
-	console.log('rulesNameOptions: ', rulesNameOptions)
-	console.log('profiles: ', profiles)
-	
 	const handleChange = async (
 		key: string,
 		field: 'field-rule' | 'site-rule' | 'rule-name',
@@ -62,8 +58,8 @@ const formRules = () => {
 			console.log('prev: ', prev)
 			const newRules = { ...prev }
 			newRules[rulesNameOptions[0].value] = {
-				'field-rule': '',
-				'site-rule': ''
+				'site-rule': '(?:)',
+				'field-rule': ''
 			}
 			return newRules
 		})
@@ -90,9 +86,8 @@ const formRules = () => {
 			key: 'site-rule',
 			render: (_, record) => (
 				<Input
-					defaultValue="(?:)"
-					value={record['site-rule']}
-					onChange={(event) => {
+					defaultValue={record['site-rule']}
+					onBlur={(event) => {
 						handleChange(record.key, 'site-rule', event.target.value)
 					}}
 				/>
@@ -104,8 +99,8 @@ const formRules = () => {
 			key: 'field-rule',
 			render: (_, record) => (
 				<Input
-					value={record['field-rule']}
-					onChange={(event) => {
+					defaultValue={record['field-rule']}
+					onBlur={(event) => {
 						handleChange(record.key, 'field-rule', event.target.value)
 					}}
 				/>
