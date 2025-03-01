@@ -14,18 +14,29 @@ const Popup = () => {
 	const theme: Theme = useStorage(themeStorage)
 	const isLight = theme === 'light'
 	
-	const { profiles, profileNames, activeProfile } = useStorage(formProfileStorage);
-	console.log("profiles: ", profiles)
-	console.log("profileNames: ", profileNames)
-	console.log("activeProfile: ", activeProfile)
+	const { profiles, profileNames, activeProfile } = useStorage(formProfileStorage)
+	console.log('profiles: ', profiles)
+	console.log('profileNames: ', profileNames)
+	console.log('activeProfile: ', activeProfile)
 	
-	const profileSelectOptions = profileNames.map(profile => ({label: profile, value: profile}))
+	const profileSelectOptions = profileNames.map(profile => ({ label: profile, value: profile }))
 	const onChangeProfile = (value: string) => {
 		formProfileStorage.set(prev => ({
 			...prev,
 			activeProfile: value
-		}));
+		}))
 	}
+	
+	const handleFillForm = () => {
+		chrome.tabs.query({ active: true, currentWindow: true })
+			.then(tabs => {
+				if (!tabs?.[0]) {
+					return;
+				}
+				const currentTabId = tabs[0].id;
+				chrome.tabs.sendMessage(currentTabId, { action: 'fillForm' });
+			});
+	};
 	
 	return (
 		<div
@@ -35,40 +46,40 @@ const Popup = () => {
 			)}
 		>
 			{/* Header */}
-			<header className="flex justify-between items-center p-4 border-b border-gray-200 dark:border-gray-700 h-full">
-				<div className="flex space-x-2">
+			<header className='flex justify-between items-center p-4 border-b border-gray-200 dark:border-gray-700 h-full'>
+				<div className='flex space-x-2'>
 					<ThemeToggleButton theme={theme} />
 					<Button
-						type="default"
-						onClick={() => navigateToUrl("https://github.com/IliyaBrook/smart_form_fill/blob/master/README.md")}
+						type='default'
+						onClick={() => navigateToUrl('https://github.com/IliyaBrook/smart_form_fill/blob/master/README.md')}
 						icon={<Img
 							theme={theme}
-							alt="info"
-							lightSrc="info_white.png"
-							darkSrc="info_black.png"
+							alt='info'
+							lightSrc='info_white.png'
+							darkSrc='info_black.png'
 						/>}
 					/>
 					<Button
-						type="default"
-						onClick={() => navigateToUrl("https://github.com/IliyaBrook/smart_form_fill/issues")}
+						type='default'
+						onClick={() => navigateToUrl('https://github.com/IliyaBrook/smart_form_fill/issues')}
 						icon={<Img
 							theme={theme}
-							alt="bug"
-							lightSrc="bug_white.png"
-							darkSrc="bug_black.png"
+							alt='bug'
+							lightSrc='bug_white.png'
+							darkSrc='bug_black.png'
 						/>}
 					/>
 				</div>
 				<div>
 					<Button
-						type="default"
+						type='default'
 						onClick={() => navigateToTab('src/pages/settings/index.html')}
 						icon={<Img
 							theme={theme}
-							alt="info"
-							lightSrc="info_white.png"
-							darkSrc="info_black.png"
-							className="w-4 h-4 mr-2"
+							alt='info'
+							lightSrc='info_white.png'
+							darkSrc='info_black.png'
+							className='w-4 h-4 mr-2'
 						/>}
 					>
 						Settings
@@ -77,8 +88,8 @@ const Popup = () => {
 				<div>
 					<Select
 						showSearch
-						placeholder="Select Profile"
-						optionFilterProp="label"
+						placeholder='Select Profile'
+						optionFilterProp='label'
 						onChange={onChangeProfile}
 						options={profileSelectOptions}
 						value={activeProfile}
@@ -86,27 +97,25 @@ const Popup = () => {
 				</div>
 			</header>
 			{/* Main Content */}
-			<div className="flex justify-center h-full">
+			<div className='flex justify-center h-full'>
 				<Space>
 					<Button
 						size='large'
 						type='default'
 						icon={<Img
 							theme={theme}
-							alt="info"
-							lightSrc="form_white.png"
-							darkSrc="form_black.png"
-							className="w-4 h-4 mr-2"
+							alt='info'
+							lightSrc='form_white.png'
+							darkSrc='form_black.png'
+							className='w-4 h-4 mr-2'
 						/>}
-						onClick={() => {
-							//@Todo implement "FILL FORM"
-						}}
+						onClick={handleFillForm}
 					>
 						FILL FORM
 					</Button>
 				</Space>
 			</div>
-			<div className="flex items-center justify-around h-full">
+			<div className='flex items-center justify-around h-full'>
 				<Space>
 					<Button
 						type='default'
@@ -120,8 +129,8 @@ const Popup = () => {
 					</Button>
 				</Space>
 				<Divider
-					type="vertical"
-					className="border h-[60%]"
+					type='vertical'
+					className='border h-[60%]'
 					// style={{ borderWidth: '1px', height: '60%' }}
 				/>
 				<Space>

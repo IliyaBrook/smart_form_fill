@@ -1,4 +1,3 @@
-import DefaultProfileTooltip from '@pages/settings/formProfile/defaultProfileTooltip'
 import { useStorage } from '@src/hooks'
 import formProfileStorage from '@src/storage/formProfileStorage'
 import rulesStorage from '@src/storage/rulesStorage'
