@@ -32,7 +32,7 @@ const FormProfile = () => {
 	
 	
 	const handleProfileChange = (value: string) => {
-		formProfileStorage.set(prev => ({
+		void formProfileStorage.set(prev => ({
 			...prev,
 			activeProfile: value
 		}))
@@ -40,7 +40,7 @@ const FormProfile = () => {
 	
 	const handleAddValue = () => {
 		setIsReady(false)
-		formProfileStorage.set(prev => {
+		void formProfileStorage.set(prev => {
 			const newProfile = { ...prev.profiles[prev.activeProfile] }
 			newProfile[`newKey_${Date.now()}`] = { name: '', value: '', type: 'text' }
 			return {
@@ -54,7 +54,7 @@ const FormProfile = () => {
 	}
 	
 	const handleDeleteRow = (key: string) => {
-		formProfileStorage.set(prev => {
+		void formProfileStorage.set(prev => {
 			const newProfile = { ...prev.profiles[prev.activeProfile] }
 			delete newProfile[key]
 			return {
@@ -70,7 +70,7 @@ const FormProfile = () => {
 	const handleDuplicateProfile = () => {
 		const newName = `${activeProfile} (copy)`
 		if (profileNames.includes(newName)) {
-			Swal.fire({
+			void Swal.fire({
 				icon: 'warning',
 				title: 'Duplicate Profile Name',
 				text: 'A profile with this name already exists. Please choose a different name.'
@@ -78,7 +78,7 @@ const FormProfile = () => {
 			return
 		}
 		
-		formProfileStorage.set(prev => ({
+		void formProfileStorage.set(prev => ({
 			...prev,
 			profileNames: [...prev.profileNames, newName],
 			profiles: {
@@ -91,7 +91,7 @@ const FormProfile = () => {
 	
 	const handleDeleteProfile = () => {
 		if (activeProfile === 'default') return
-		formProfileStorage.set(prev => {
+		void formProfileStorage.set(prev => {
 			const newProfiles = { ...prev.profiles }
 			delete newProfiles[prev.activeProfile]
 			return {
@@ -106,7 +106,7 @@ const FormProfile = () => {
 	const handleRenameProfile = () => {
 		if (!newProfileName) return
 		if (profileNames.includes(newProfileName)) {
-			Swal.fire({
+			void Swal.fire({
 				icon: 'warning',
 				title: 'Duplicate Profile Name',
 				text: 'A profile with this name already exists. Please choose a different name.'
@@ -114,7 +114,7 @@ const FormProfile = () => {
 			return
 		}
 		
-		formProfileStorage.set(prev => {
+		void formProfileStorage.set(prev => {
 			const newProfiles = { ...prev.profiles, [newProfileName]: prev.profiles[prev.activeProfile] }
 			delete newProfiles[prev.activeProfile]
 			return {
@@ -130,7 +130,7 @@ const FormProfile = () => {
 	const handleCreateProfile = () => {
 		if (!newProfileName) return
 		if (profileNames.includes(newProfileName)) {
-			Swal.fire({
+			void Swal.fire({
 				icon: 'warning',
 				title: 'Duplicate Profile Name',
 				text: 'A profile with this name already exists. Please choose a different name.'
@@ -138,7 +138,7 @@ const FormProfile = () => {
 			return
 		}
 		
-		formProfileStorage.set(prev => ({
+		void formProfileStorage.set(prev => ({
 			...prev,
 			profileNames: [...prev.profileNames, newProfileName],
 			profiles: {
@@ -196,7 +196,7 @@ const FormProfile = () => {
 		if (info.file.status === 'done') {
 			const reader = new FileReader()
 			reader.onload = (e: any) => {
-				formProfileStorage.set((prev) => ({
+				void formProfileStorage.set((prev) => ({
 					...prev,
 					profiles: {
 						...prev.profiles,
@@ -213,11 +213,11 @@ const FormProfile = () => {
 						}
 					}
 				}))
-				message.success(`${info.file.name} file uploaded successfully`)
+				void message.success(`${info.file.name} file uploaded successfully`)
 			}
 			reader.readAsDataURL(info.file.originFileObj)
 		} else if (info.file.status === 'error') {
-			message.error(`${info.file.name} file upload failed.`)
+			void message.error(`${info.file.name} file upload failed.`)
 		}
 	}
 	
@@ -233,7 +233,7 @@ const FormProfile = () => {
 				text:
 					'A rule with this name already exists in the current profile. Please choose a different name.'
 			}).then(() => {
-				formProfileStorage.set((prev) => {
+				void formProfileStorage.set((prev) => {
 					const updatedProfile = { ...prev.profiles[prev.activeProfile] }
 					delete updatedProfile[record.key]
 					return {
@@ -258,7 +258,7 @@ const FormProfile = () => {
 					key={record.key}
 					defaultValue={record.name}
 					onBlur={(event) => {
-						handleProfileItemChange(record.key, 'name', event.target.value)
+						void handleProfileItemChange(record.key, 'name', event.target.value)
 						onRuleNameCheckDuplicates(event, record)
 					}}
 				/>
@@ -330,7 +330,7 @@ const FormProfile = () => {
 		if (Object.keys(currentProfile).length !== 0) {
 			const emptyFields = findKeysByValue(currentProfile, '')
 			if (emptyFields.length > 0) {
-				formProfileStorage.set((prev) => {
+				void formProfileStorage.set((prev) => {
 					const updatedProfiles = { ...prev.profiles }
 					emptyFields.forEach((key) => {
 						delete updatedProfiles[prev.activeProfile][key]
@@ -345,7 +345,7 @@ const FormProfile = () => {
 			}
 			const { uniqueObject, duplicateKeys } = findAndGroupDuplicates(currentProfile, (item) => item.name)
 			if (duplicateKeys.length > 0) {
-				formProfileStorage.set(prev => ({
+				void formProfileStorage.set(prev => ({
 					...prev,
 					profiles: {
 						...prev.profiles,

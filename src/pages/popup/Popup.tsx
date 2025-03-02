@@ -17,7 +17,7 @@ const Popup = () => {
 	const { profileNames, activeProfile } = useStorage(formProfileStorage)
 	const profileSelectOptions = profileNames.map(profile => ({ label: profile, value: profile }))
 	const onChangeProfile = (value: string) => {
-		formProfileStorage.set(prev => ({
+		void formProfileStorage.set(prev => ({
 			...prev,
 			activeProfile: value
 		}))

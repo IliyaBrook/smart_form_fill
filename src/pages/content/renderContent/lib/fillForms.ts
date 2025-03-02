@@ -146,13 +146,9 @@ function fillForms(profile: { [key: string]: ProfileItem }, rulesData: RulesData
 		inputs
 			.filter((input) => founds.has(input))
 			.forEach((element) => {
-				
 				const key = decide(element);
 				const rawValue = profile[key]?.value || "";
-				const value: string = typeof rawValue === "string" ? rawValue : rawValue.content;
-				console.log("element:", element)
-				console.log("rawValue:", rawValue)
-				console.log("value:", value)
+				const value: string = typeof rawValue === "string" ? rawValue : (rawValue as { name: string; content: string; }).content; // Type assertion for value
 				
 				if (element instanceof HTMLInputElement) {
 					if (element.type === "radio") {
@@ -165,8 +161,40 @@ function fillForms(profile: { [key: string]: ProfileItem }, rulesData: RulesData
 					} else if (element.type === "checkbox") {
 						element.checked = Boolean(value);
 						changeElement(element, " ");
-					} else if (element.type === "file") { // **Добавлено условие для file input**
-						console.warn("Поле типа 'file' найдено. Автоматическое заполнение файлов не поддерживается. Пожалуйста, заполните поле вручную:", element);
+					} else if (element.type === "file") {
+						console.warn('Attempting to automatically fill the \'file\' input field:', element)
+						if (rawValue && (rawValue as { name: string; content: string; }).content && (rawValue as { name: string; content: string; }).name) {
+							try {
+								const rawValueTyped = rawValue as { name: string; content: string; };
+								const byteCharacters = window.atob(value);
+								const byteArrays = [];
+								for (let offset = 0; offset < byteCharacters.length; offset += 512) {
+									const slice = byteCharacters.slice(offset, offset + 512);
+									const byteNumbers = new Array(slice.length);
+									for (let i = 0; i < slice.length; i++) {
+										byteNumbers[i] = slice.charCodeAt(i);
+									}
+									const byteArray = new Uint8Array(byteNumbers);
+									byteArrays.push(byteArray);
+								}
+								const blob = new Blob(byteArrays, { type: 'application/pdf' });
+								const fileName = rawValueTyped.name;
+								const file = new File([blob], fileName);
+								
+								const dataTransfer = new DataTransfer();
+								dataTransfer.items.add(file);
+								(element as HTMLInputElement).files = dataTransfer.files;
+								element.dispatchEvent(new Event('change', { bubbles: true }));
+							} catch (error) {
+								console.error('Error creating Blob/File from base64 and trying to fill input type=\'file\':', error, element)
+								console.warn('Automatic filling of the \'file\' input field failed:', element, 'Please fill in the field manually.')
+								element.classList.add('smart-form-fill-file-field-error')
+							}
+						} else {
+							console.warn('Insufficient data to fill the file input (no content or name in profile):', element, rawValue)
+							console.warn('Automatic filling of the \'file\' input field failed:', element, 'Please fill in the field manually.')
+							element.classList.add('smart-form-fill-file-field-error')
+						}
 					}
 					else {
 						const replaced = value
@@ -176,13 +204,12 @@ function fillForms(profile: { [key: string]: ProfileItem }, rulesData: RulesData
 						element.value = formatted;
 						try {
 							element.selectionStart = element.selectionEnd = formatted.length;
-						} catch (e) {
+						} catch {
 							// ignore
 						}
 						changeElement(element, formatted.slice(-1));
 					}
 				} else if (element instanceof HTMLTextAreaElement) {
-					console.log("Заполняю textarea:", element); // **Добавлен лог для textarea**
 					const replaced = value
 						.replace(/_url_/g, window.location.href)
 						.replace(/_host_/g, window.location.hostname);
@@ -201,8 +228,7 @@ function fillForms(profile: { [key: string]: ProfileItem }, rulesData: RulesData
 					});
 				}
 			});
-	}
-	return null;
+	}	return null;
 }
 
 export default fillForms

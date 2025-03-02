@@ -113,7 +113,7 @@ const formRules = () => {
 	
 	
 	const handleDeleteRow = (key: string) => {
-		rulesStorage.set(prev => {
+		void rulesStorage.set(prev => {
 			const newRules = { ...prev }
 			delete newRules[key]
 			return newRules
@@ -127,7 +127,7 @@ const formRules = () => {
 			});
 			return
 		}
-		rulesStorage.set(prev => {
+		void rulesStorage.set(prev => {
 			const newRules = { ...prev }
 			newRules[rulesNameOptions[0].value] = {
 				'site-rule': '(?:)',
@@ -146,7 +146,7 @@ const formRules = () => {
 				<Select
 					value={record.key}
 					onChange={(value) => {
-						handleChange(record.key, 'rule-name', value)
+						void handleChange(record.key, 'rule-name', value)
 					}}
 					options={rulesNameOptions}
 				/>
@@ -168,7 +168,7 @@ const formRules = () => {
 						status={rowStatuses[record.key]?.['site-rule']}
 						defaultValue={record['site-rule']}
 						onBlur={(event) => {
-							handleChange(record.key, 'site-rule', event.target.value)
+							void handleChange(record.key, 'site-rule', event.target.value)
 						}}
 						ref={inputRefs.current[record.key]['site-rule'] }
 					/>
@@ -192,7 +192,7 @@ const formRules = () => {
 						status={rowStatuses[record.key]?.['field-rule']}
 						defaultValue={record['field-rule']}
 						onBlur={(event) => {
-							handleChange(record.key, 'field-rule', event.target.value)
+							void handleChange(record.key, 'field-rule', event.target.value)
 						}}
 					/>
 				)

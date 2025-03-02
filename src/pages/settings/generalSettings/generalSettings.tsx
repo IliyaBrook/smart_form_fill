@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react'
-import { Upload, Button } from 'antd';
-import type { UploadProps } from 'antd';
 import { DownloadOutlined, ReloadOutlined, UploadOutlined } from '@ant-design/icons'
-import Swal from 'sweetalert2';
+import type { UploadProps } from 'antd'
+import { Button, Upload } from 'antd'
+import React from 'react'
+import Swal from 'sweetalert2'
 
 const GeneralSettings: React.FC = () => {
 	
@@ -44,14 +44,14 @@ const GeneralSettings: React.FC = () => {
 							})
 						})
 					} else {
-						Swal.fire({
+						void Swal.fire({
 							icon: 'error',
 							title: 'Error',
 							text: 'Error reading file.'
 						});
 					}
 				} catch (error) {
-					Swal.fire({
+					void Swal.fire({
 						icon: 'error',
 						title: 'Parsing Error',
 						text: 'JSON parsing error: ' + error

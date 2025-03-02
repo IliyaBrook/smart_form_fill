@@ -21,7 +21,7 @@ const updateCache = async <D>(valueOrUpdate: ValueOrUpdate<D>, cache: D | null):
     return typeof value === 'function';
   };
 
-  // Type guard to check in case of a function, if its a Promise
+  // Type guard to check in case of a function, if it's a Promise
   const returnsPromise = <D>(func: (prev: D) => D | Promise<D>): func is (prev: D) => Promise<D> => {
     // Use ReturnType to infer the return type of the function and check if it's a Promise
     return (func as (prev: D) => Promise<D>) instanceof Promise;
