@@ -288,7 +288,7 @@ const FormProfile = () => {
 					return (
 						<Input
 							key={`${record.key}_text`}
-							value={typeof record.value === 'string' ? record.value : ''}
+							defaultValue={typeof record.value === 'string' ? record.value : ''}
 							onBlur={(e) => handleProfileItemChange(record.key, 'value', e.target.value)}
 						/>
 					)

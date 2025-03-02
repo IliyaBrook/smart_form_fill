@@ -31,17 +31,17 @@ const Popup = () => {
 		chrome.tabs
 			.query({ active: true, currentWindow: true })
 			.then(tabs => {
-				if (!tabs?.[0]) return;
-				const currentTabId = tabs[0].id;
+				if (!tabs?.[0]) return
+				const currentTabId = tabs[0].id
 				chrome.tabs.sendMessage(currentTabId, { action: 'fillForm' }, response => {
 					if (chrome.runtime.lastError) {
-						console.error("Ошибка отправки сообщения:", chrome.runtime.lastError.message);
+						console.error('Error sending message:', chrome.runtime.lastError.message)
 					} else {
-						console.log("Ответ от content‑скрипта:", response);
+						console.log('Response from content script:', response)
 					}
-				});
+				})
 			})
-			.catch(error => console.error("Ошибка в query:", error));
+			.catch(error => console.error('Error in query:', error))
 	};
 	
 	return (
