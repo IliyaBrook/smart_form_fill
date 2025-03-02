@@ -10,38 +10,38 @@ export default function Content() {
   const { profiles, profileNames, activeProfile }: FormProfilesData = useStorage(formProfileStorage);
   
   useEffect(() => {
-    // Обработчик сообщения
+    // Message handler
     const listener = (message: any, sender: any, sendResponse: (response: any) => void) => {
-      if (message.action === "fillForm") {
-        console.log("Content script: получено сообщение fillForm");
+      if (message.action === 'fillForm') {
+        console.log('Content script: received fillForm message')
         
         if (!rulesData || Object.keys(rulesData).length === 0) {
-          console.error("В локальном хранилище нет правил (rulesData пустой).");
-          sendResponse({ message: "no rules" });
-          return true;
+          console.error('No rules in local storage (rulesData is empty).')
+          sendResponse({ message: 'no rules' })
+          return true
         }
         
         if (!profiles || !activeProfile || !profiles[activeProfile]) {
-          console.error("Активный профиль не найден или профили пусты.");
-          sendResponse({ message: "no profile" });
-          return true;
+          console.error('Active profile not found or profiles are empty.')
+          sendResponse({ message: 'no profile' })
+          return true
         }
         
-        const profile = profiles[activeProfile];
-        console.log("Активный профиль:", activeProfile, profile);
-        console.log("Правила:", rulesData);
+        const profile = profiles[activeProfile]
+        console.log('Active profile:', activeProfile, profile)
+        console.log('Rules:', rulesData)
         
-        fillForms(profile, rulesData);
-        sendResponse({ message: "ok" });
-        return true;
+        fillForms(profile, rulesData)
+        sendResponse({ message: 'ok' })
+        return true
       }
-    };
+    }
     
-    chrome.runtime.onMessage.addListener(listener);
+    chrome.runtime.onMessage.addListener(listener)
     
     return () => {
-      chrome.runtime.onMessage.removeListener(listener);
-    };
+      chrome.runtime.onMessage.removeListener(listener)
+    }
   }, [rulesData, profiles, activeProfile]);
 
   return null;
