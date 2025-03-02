@@ -28,14 +28,20 @@ const Popup = () => {
 	}
 	
 	const handleFillForm = () => {
-		chrome.tabs.query({ active: true, currentWindow: true })
+		chrome.tabs
+			.query({ active: true, currentWindow: true })
 			.then(tabs => {
-				if (!tabs?.[0]) {
-					return;
-				}
+				if (!tabs?.[0]) return;
 				const currentTabId = tabs[0].id;
-				chrome.tabs.sendMessage(currentTabId, { action: 'fillForm' });
-			});
+				chrome.tabs.sendMessage(currentTabId, { action: 'fillForm' }, response => {
+					if (chrome.runtime.lastError) {
+						console.error("Ошибка отправки сообщения:", chrome.runtime.lastError.message);
+					} else {
+						console.log("Ответ от content‑скрипта:", response);
+					}
+				});
+			})
+			.catch(error => console.error("Ошибка в query:", error));
 	};
 	
 	return (
