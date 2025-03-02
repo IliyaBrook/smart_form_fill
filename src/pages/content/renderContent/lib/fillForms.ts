@@ -15,7 +15,6 @@ function fillForms(profile: { [key: string]: ProfileItem }, rulesData: RulesData
 	if (detect === "forms") {
 		try {
 			const forms = Array.from(document.forms);
-			console.log("forms:", forms);
 			if (forms.length > 0) {
 				forms.forEach((form, formIndex) => {
 					matrix.set(form, formIndex);
@@ -29,8 +28,6 @@ function fillForms(profile: { [key: string]: ProfileItem }, rulesData: RulesData
 			console.error("Detect forms error: ", error);
 		}
 	}
-	
-	console.log("all input after grab:", inputs);
 	
 	if (inputs.length === 0 || detect === "body") {
 		try {
@@ -149,9 +146,13 @@ function fillForms(profile: { [key: string]: ProfileItem }, rulesData: RulesData
 		inputs
 			.filter((input) => founds.has(input))
 			.forEach((element) => {
+				
 				const key = decide(element);
 				const rawValue = profile[key]?.value || "";
 				const value: string = typeof rawValue === "string" ? rawValue : rawValue.content;
+				console.log("element:", element)
+				console.log("rawValue:", rawValue)
+				console.log("value:", value)
 				
 				if (element instanceof HTMLInputElement) {
 					if (element.type === "radio") {
@@ -164,7 +165,10 @@ function fillForms(profile: { [key: string]: ProfileItem }, rulesData: RulesData
 					} else if (element.type === "checkbox") {
 						element.checked = Boolean(value);
 						changeElement(element, " ");
-					} else {
+					} else if (element.type === "file") { // **Добавлено условие для file input**
+						console.warn("Поле типа 'file' найдено. Автоматическое заполнение файлов не поддерживается. Пожалуйста, заполните поле вручную:", element);
+					}
+					else {
 						const replaced = value
 							.replace(/_url_/g, window.location.href)
 							.replace(/_host_/g, window.location.hostname);
@@ -178,6 +182,7 @@ function fillForms(profile: { [key: string]: ProfileItem }, rulesData: RulesData
 						changeElement(element, formatted.slice(-1));
 					}
 				} else if (element instanceof HTMLTextAreaElement) {
+					console.log("Заполняю textarea:", element); // **Добавлен лог для textarea**
 					const replaced = value
 						.replace(/_url_/g, window.location.href)
 						.replace(/_host_/g, window.location.hostname);

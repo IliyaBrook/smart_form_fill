@@ -13,8 +13,6 @@ export default function Content() {
     // Message handler
     const listener = (message: any, sender: any, sendResponse: (response: any) => void) => {
       if (message.action === 'fillForm') {
-        console.log('Content script: received fillForm message')
-        
         if (!rulesData || Object.keys(rulesData).length === 0) {
           console.error('No rules in local storage (rulesData is empty).')
           sendResponse({ message: 'no rules' })
@@ -26,11 +24,7 @@ export default function Content() {
           sendResponse({ message: 'no profile' })
           return true
         }
-        
         const profile = profiles[activeProfile]
-        console.log('Active profile:', activeProfile, profile)
-        console.log('Rules:', rulesData)
-        
         fillForms(profile, rulesData)
         sendResponse({ message: 'ok' })
         return true

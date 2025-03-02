@@ -14,11 +14,7 @@ const Popup = () => {
 	const theme: Theme = useStorage(themeStorage)
 	const isLight = theme === 'light'
 	
-	const { profiles, profileNames, activeProfile } = useStorage(formProfileStorage)
-	console.log('profiles: ', profiles)
-	console.log('profileNames: ', profileNames)
-	console.log('activeProfile: ', activeProfile)
-	
+	const { profileNames, activeProfile } = useStorage(formProfileStorage)
 	const profileSelectOptions = profileNames.map(profile => ({ label: profile, value: profile }))
 	const onChangeProfile = (value: string) => {
 		formProfileStorage.set(prev => ({

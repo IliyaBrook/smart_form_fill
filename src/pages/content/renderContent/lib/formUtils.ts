@@ -10,25 +10,35 @@ export function formatValue(value: string): string {
 	return value.replace(/(?:\\n)|(?:<br\s*\/?>)/g, "\n");
 }
 
-
 export function grabInputs(target: HTMLElement, types: RegExp): (HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement)[] {
 	const inputs = new Set<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>();
+	
 	target.querySelectorAll("[name]").forEach((el) => {
-		if (el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement || el instanceof HTMLSelectElement) {
+		if (el instanceof HTMLInputElement) {
 			if (types.test(el.type)) {
 				inputs.add(el);
+			} else if (el.type === 'file') {
+				inputs.add(el);
 			}
+		} else if (el instanceof HTMLTextAreaElement || el instanceof HTMLSelectElement) {
+			inputs.add(el);
 		}
 	});
+	
 	target.querySelectorAll("input, textarea, select").forEach((el) => {
-		if (el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement || el instanceof HTMLSelectElement) {
+		if (el instanceof HTMLInputElement) {
 			if (getId(el) && types.test(el.type)) {
+				inputs.add(el);
+			} else if (getId(el) && el.type === 'file') {
+				inputs.add(el);
+			}
+		} else if (el instanceof HTMLTextAreaElement || el instanceof HTMLSelectElement) {
+			if (getId(el)) {
 				inputs.add(el);
 			}
 		}
 	});
-	console.log("[grabInputs func] inputs: ", inputs)
-	console.log("[grabInputs func] target: ", target)
+	
 	return Array.from(inputs);
 }
 
@@ -37,8 +47,6 @@ export function changeElement(element: HTMLElement, value: string = " ") {
 		const o: KeyboardEventInit = {
 			code: value === " " ? "Space" : value.toUpperCase(),
 			key: value,
-			keyCode: value.charCodeAt(0),
-			which: value.charCodeAt(0),
 			bubbles: true,
 		};
 		element.dispatchEvent(new KeyboardEvent("keydown", o));

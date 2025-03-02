@@ -8,8 +8,6 @@ const GeneralSettings: React.FC = () => {
 	
 	const handleExport = (): void => {
 		chrome.storage.local.get(null, (data: any) => {
-			console.log("data:", data)
-			
 			const jsonData = JSON.stringify(data, null, 2);
 			const blob = new Blob([jsonData], { type: 'application/json' });
 			const url = URL.createObjectURL(blob);

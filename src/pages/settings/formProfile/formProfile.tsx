@@ -196,7 +196,6 @@ const FormProfile = () => {
 		if (info.file.status === 'done') {
 			const reader = new FileReader()
 			reader.onload = (e: any) => {
-				console.log('handleFileUpload result:', e.target.result.split(',')[1])
 				formProfileStorage.set((prev) => ({
 					...prev,
 					profiles: {
