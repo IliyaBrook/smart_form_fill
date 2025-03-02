@@ -14,8 +14,7 @@ const FormProfile = () => {
 	const [newProfileName, setNewProfileName] = useState<string>('')
 	const isDefaultProfile = activeProfile === 'default'
 	const [isReady, setIsReady] = useState(false)
-	console.log('profiles: ', profiles)
-	
+
 	useEffect(() => {
 		setTimeout(() => {
 			setIsReady(true)

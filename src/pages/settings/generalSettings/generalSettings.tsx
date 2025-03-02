@@ -1,12 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react'
 import { Upload, Button } from 'antd';
 import type { UploadProps } from 'antd';
-import { DownloadOutlined, UploadOutlined } from '@ant-design/icons';
+import { DownloadOutlined, ReloadOutlined, UploadOutlined } from '@ant-design/icons'
 import Swal from 'sweetalert2';
 
 const GeneralSettings: React.FC = () => {
+	
 	const handleExport = (): void => {
 		chrome.storage.local.get(null, (data: any) => {
+			console.log("data:", data)
+			
 			const jsonData = JSON.stringify(data, null, 2);
 			const blob = new Blob([jsonData], { type: 'application/json' });
 			const url = URL.createObjectURL(blob);
@@ -38,8 +41,10 @@ const GeneralSettings: React.FC = () => {
 								icon: 'success',
 								title: 'Import Successful',
 								text: 'Settings imported successfully!'
-							});
-						});
+							}).then(() => {
+								window.location.reload();
+							})
+						})
 					} else {
 						Swal.fire({
 							icon: 'error',
@@ -60,6 +65,29 @@ const GeneralSettings: React.FC = () => {
 		}
 	};
 	
+	const handleRestore = (): void => {
+		Swal.fire({
+			title: 'Are you sure?',
+			text: 'All settings will be deleted. This cannot be undone.',
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonText: 'Yes, restore settings!',
+			cancelButtonText: 'Cancel',
+		}).then((result) => {
+			if (result.isConfirmed) {
+				chrome.storage.local.clear(() => {
+					Swal.fire({
+						icon: 'success',
+						title: 'Restored',
+						text: 'All settings have been deleted!',
+					}).then(() => {
+						window.location.reload();
+					})
+				});
+			}
+		});
+	};
+	
 	return (
 		<div className="p-4">
 			<h2 className="text-xl font-semibold mb-4">GeneralSettings</h2>
@@ -72,6 +100,9 @@ const GeneralSettings: React.FC = () => {
 						Import
 					</Button>
 				</Upload>
+				<Button danger className="ml-2" icon={<ReloadOutlined />} onClick={handleRestore}>
+					Restore
+				</Button>
 			</div>
 		</div>
 	);

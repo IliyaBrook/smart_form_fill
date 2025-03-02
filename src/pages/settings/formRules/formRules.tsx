@@ -3,9 +3,10 @@ import formProfileStorage from '@src/storage/formProfileStorage'
 import rulesStorage from '@src/storage/rulesStorage'
 import { Button, Input, Select, Table } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
-import React from 'react'
+import React, { useEffect } from 'react'
 
 const formRules = () => {
+
 	const rulesData = useStorage(rulesStorage)
 	const { profiles } = useStorage(formProfileStorage)
 	const uniqueKeys = Array.from(
