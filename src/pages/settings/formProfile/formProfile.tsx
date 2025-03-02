@@ -18,7 +18,7 @@ const FormProfile = () => {
 	useEffect(() => {
 		setTimeout(() => {
 			setIsReady(true)
-		}, 1000)
+		}, 2000)
 	}, [])
 	
 	const currentProfile = profiles[activeProfile] ?? {}

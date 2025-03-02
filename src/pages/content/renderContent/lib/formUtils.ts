@@ -10,11 +10,9 @@ export function formatValue(value: string): string {
 	return value.replace(/(?:\\n)|(?:<br\s*\/?>)/g, "\n");
 }
 
+
 export function grabInputs(target: HTMLElement, types: RegExp): (HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement)[] {
 	const inputs = new Set<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>();
-	// Первый проход: все элементы с атрибутом [name]
-
-	
 	target.querySelectorAll("[name]").forEach((el) => {
 		if (el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement || el instanceof HTMLSelectElement) {
 			if (types.test(el.type)) {
@@ -22,7 +20,6 @@ export function grabInputs(target: HTMLElement, types: RegExp): (HTMLInputElemen
 			}
 		}
 	});
-	// Второй проход: input, textarea, select
 	target.querySelectorAll("input, textarea, select").forEach((el) => {
 		if (el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement || el instanceof HTMLSelectElement) {
 			if (getId(el) && types.test(el.type)) {

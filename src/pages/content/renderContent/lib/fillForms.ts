@@ -1,10 +1,12 @@
 import type { ProfileItem, RulesData } from '@src/types/settings'
+import { safeRegex } from '@src/utils/Regex'
 import { changeElement, formatValue, getId, grabInputs, inspectElement } from './formUtils'
 
 function fillForms(profile: { [key: string]: ProfileItem }, rulesData: RulesData) {
 	const mode = "insert";
 	const detect = "body";
 	const typesRegex = new RegExp("^(text|email|password|search|tel|url)$");
+	
 	let inputs: (HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement)[] = [];
 	const matrix = new WeakMap<Element, number>();
 	const founds = new WeakMap<Element, { name: string; regexp: RegExp; certainty: number }[]>();
@@ -23,11 +25,12 @@ function fillForms(profile: { [key: string]: ProfileItem }, rulesData: RulesData
 					});
 				});
 			}
-		}catch (error) {
-			console.error('Detect forms error: ', error)
+		} catch (error) {
+			console.error("Detect forms error: ", error);
 		}
 	}
-	console.log("all input after grab:", inputs)
+	
+	console.log("all input after grab:", inputs);
 	
 	if (inputs.length === 0 || detect === "body") {
 		try {
@@ -35,25 +38,31 @@ function fillForms(profile: { [key: string]: ProfileItem }, rulesData: RulesData
 				inputs.push(input);
 				matrix.set(input, index);
 			});
-		}catch (error) {
-			console.error('Detect body error: ', error)
+		} catch (error) {
+			console.error("Detect body error: ", error);
 		}
 	}
-	inputs = inputs.filter((e, i, arr) => arr.indexOf(e) === i);
 
-	// Функция для добавления найденного совпадения
-	const append = (input: Element, name: string, regexp: RegExp, certainty: number = 1) => {
+	inputs = inputs.filter((e, i, arr) => arr.indexOf(e) === i);
+	
+	/**
+	 * Append a found match into the 'founds' map
+	 */
+	const append = (input: Element, name: string, regexp: RegExp, certainty = 1) => {
 		const arr = founds.get(input) || [];
 		arr.push({ name, regexp, certainty });
 		founds.set(input, arr);
 	};
-
-	// Выбор наилучшего совпадения
+	
+	/**
+	 * Decide which rule has the highest 'certainty' for the element
+	 */
 	const decide = (input: Element): string => {
 		const arr = founds.get(input) || [];
 		const max = Math.max(...arr.map((o) => o.certainty));
 		const candidates = arr.filter((o) => o.certainty === max);
 		const inputName = getId(input as HTMLElement);
+		
 		candidates.sort((a, b) => {
 			try {
 				const lenA = (a.regexp.exec(inputName) || [""])[0].length;
@@ -65,114 +74,130 @@ function fillForms(profile: { [key: string]: ProfileItem }, rulesData: RulesData
 		});
 		return candidates[0].name;
 	};
-
-	// Фильтрация правил по текущему URL
+	
+	// Filter and compile rules by current URL
 	const currentUrl = window.location.href;
 	const applicableRules = Object.keys(rulesData)
-		.map((key) => ({ name: key, ...rulesData[key] }))
-		.filter((rule) => {
-			const r = new RegExp(rule["site-rule"], "i");
-			return r.test(currentUrl);
+		.map((key) => {
+			const siteRaw = rulesData[key]["site-rule"];
+			const fieldRaw = rulesData[key]["field-rule"];
+			
+			const siteRegex = safeRegex(siteRaw);
+			const fieldRegex = safeRegex(fieldRaw);
+			
+			if (!siteRegex || !fieldRegex) {
+				console.warn(`[fillForms] Skip rule "${key}" because of invalid RegExp.`);
+				return null;
+			}
+			return {
+				name: key,
+				siteRegex,
+				fieldRegex,
+			};
 		})
-		.reverse();
-
-	// Этап 1: проверка имени или id элемента
+		.filter((item) => item !== null)
+		.filter((rule) => rule!.siteRegex.test(currentUrl))
+		.reverse() as Array<{ name: string; siteRegex: RegExp; fieldRegex: RegExp }>;
+	
+	// Stage 1: check element name or id
 	inputs.forEach((input) => {
 		for (const rule of applicableRules) {
-			const exp = rule["field-rule"];
-			if (exp.startsWith("position:")) {
+			const expStr = rule.fieldRegex.source;
+			if (expStr.startsWith("position:")) {
 				const index = matrix.get(input);
 				const formIndex = input.form ? matrix.get(input.form) : 0;
-				if (exp === "position:" + index + "/" + formIndex || exp === "position:" + index) {
-					append(input, rule.name, /./, 1);
+				if (expStr === `position:${index}/${formIndex}` || expStr === `position:${index}`) {
+					append(input, rule.name, rule.fieldRegex, 1);
 				}
 			} else {
-				const r = new RegExp(exp, "i");
 				const inputName = getId(input as HTMLElement);
-				if (r.test(inputName)) {
-					append(input, rule.name, r, 0.5);
+				if (rule.fieldRegex.test(inputName)) {
+					append(input, rule.name, rule.fieldRegex, 0.5);
 				}
 			}
 		}
 	});
-
-	// Этап 2: анализ содержимого элемента
+	
+	// Stage 2: inspect element contents
 	inputs.forEach((input) => {
 		for (const rule of applicableRules) {
-			const exp = rule["field-rule"];
-			if (!exp.startsWith("position:")) {
-				const r = new RegExp(exp, "i");
-				if (inspectElement(input as HTMLElement).some((text) => r.test(text))) {
-					append(input, rule.name, r, 0.25);
+			const expStr = rule.fieldRegex.source;
+			if (!expStr.startsWith("position:")) {
+				if (inspectElement(input as HTMLElement).some((text) => rule.fieldRegex.test(text))) {
+					append(input, rule.name, rule.fieldRegex, 0.25);
 				}
 			}
 		}
 	});
-
-	// Этап 3: анализ содержимого родительского элемента
+	
+	// Stage 3: inspect parent element contents
 	inputs.forEach((input) => {
 		if (input.parentElement) {
 			for (const rule of applicableRules) {
-				const exp = rule["field-rule"];
-				if (!exp.startsWith("position:")) {
-					const r = new RegExp(exp, "i");
-					if (inspectElement(input.parentElement).some((text) => r.test(text))) {
-						append(input, rule.name, r, 0.15);
+				const expStr = rule.fieldRegex.source;
+				if (!expStr.startsWith("position:")) {
+					if (inspectElement(input.parentElement).some((text) => rule.fieldRegex.test(text))) {
+						append(input, rule.name, rule.fieldRegex, 0.15);
 					}
 				}
 			}
 		}
 	});
-
-	// Заполнение найденных полей
+	
+	// Finally fill out the found fields
 	if (mode === "insert") {
-		inputs.filter(input => founds.has(input)).forEach(element => {
-			const key = decide(element);
-			// Если value не строка, то пробуем взять поле content
-			const rawValue = profile[key]?.value || "";
-			const value: string = typeof rawValue === "string" ? rawValue : rawValue.content;
-
-			if (element instanceof HTMLInputElement) {
-				if (element.type === "radio") {
-					if (
-						element.value.toLowerCase() === value.toLowerCase() ||
-						(element.textContent && element.textContent.toLowerCase() === value.toLowerCase())
-					) {
-						element.click();
+		inputs
+			.filter((input) => founds.has(input))
+			.forEach((element) => {
+				const key = decide(element);
+				const rawValue = profile[key]?.value || "";
+				const value: string = typeof rawValue === "string" ? rawValue : rawValue.content;
+				
+				if (element instanceof HTMLInputElement) {
+					if (element.type === "radio") {
+						if (
+							element.value.toLowerCase() === value.toLowerCase() ||
+							(element.textContent && element.textContent.toLowerCase() === value.toLowerCase())
+						) {
+							element.click();
+						}
+					} else if (element.type === "checkbox") {
+						element.checked = Boolean(value);
+						changeElement(element, " ");
+					} else {
+						const replaced = value
+							.replace(/_url_/g, window.location.href)
+							.replace(/_host_/g, window.location.hostname);
+						const formatted = formatValue(replaced);
+						element.value = formatted;
+						try {
+							element.selectionStart = element.selectionEnd = formatted.length;
+						} catch (e) {
+							// ignore
+						}
+						changeElement(element, formatted.slice(-1));
 					}
-				} else if (element.type === "checkbox") {
-					element.checked = Boolean(value);
-					changeElement(element, " ");
-				} else {
-					const replaced = value.replace(/_url_/g, window.location.href)
+				} else if (element instanceof HTMLTextAreaElement) {
+					const replaced = value
+						.replace(/_url_/g, window.location.href)
 						.replace(/_host_/g, window.location.hostname);
 					const formatted = formatValue(replaced);
 					element.value = formatted;
-					try {
-						element.selectionStart = element.selectionEnd = formatted.length;
-					} catch (e) {}
 					changeElement(element, formatted.slice(-1));
+				} else if (element instanceof HTMLSelectElement) {
+					Array.from(element.options).forEach((option) => {
+						if (
+							option.value.toLowerCase() === value.toLowerCase() ||
+							(option.textContent && option.textContent.toLowerCase() === value.toLowerCase())
+						) {
+							element.selectedIndex = Array.from(element.options).indexOf(option);
+							changeElement(element, " ");
+						}
+					});
 				}
-			} else if (element instanceof HTMLTextAreaElement) {
-				const replaced = value.replace(/_url_/g, window.location.href)
-					.replace(/_host_/g, window.location.hostname);
-				const formatted = formatValue(replaced);
-				element.value = formatted;
-				changeElement(element, formatted.slice(-1));
-			} else if (element instanceof HTMLSelectElement) {
-				Array.from(element.options).forEach(option => {
-					if (
-						option.value.toLowerCase() === value.toLowerCase() ||
-						(option.textContent && option.textContent.toLowerCase() === value.toLowerCase())
-					) {
-						element.selectedIndex = Array.from(element.options).indexOf(option);
-						changeElement(element, " ");
-					}
-				});
-			}
-		});
+			});
 	}
-	return null
+	return null;
 }
 
 export default fillForms
