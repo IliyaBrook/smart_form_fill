@@ -6,6 +6,7 @@ export function getId(el: HTMLElement): string {
 	return id;
 }
 
+
 export function formatValue(value: string): string {
 	return value.replace(/(?:\\n)|(?:<br\s*\/?>)/g, "\n");
 }
@@ -13,23 +14,11 @@ export function formatValue(value: string): string {
 export function grabInputs(target: HTMLElement, types: RegExp): (HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement)[] {
 	const inputs = new Set<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>();
 	
-	target.querySelectorAll("[name]").forEach((el) => {
-		if (el instanceof HTMLInputElement) {
-			if (types.test(el.type)) {
-				inputs.add(el);
-			} else if (el.type === 'file') {
-				inputs.add(el);
-			}
-		} else if (el instanceof HTMLTextAreaElement || el instanceof HTMLSelectElement) {
-			inputs.add(el);
-		}
-	});
-	
-	target.querySelectorAll("input, textarea, select").forEach((el) => {
+	target.querySelectorAll("input, textarea, select, [type='file'], [name]").forEach((el) => {
 		if (el instanceof HTMLInputElement) {
 			if (getId(el) && types.test(el.type)) {
 				inputs.add(el);
-			} else if (getId(el) && el.type === 'file') {
+			} else if (el.type === 'file') {
 				inputs.add(el);
 			}
 		} else if (el instanceof HTMLTextAreaElement || el instanceof HTMLSelectElement) {

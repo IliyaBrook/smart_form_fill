@@ -1,8 +1,9 @@
-import type { ProfileItem, RulesData } from '@src/types/settings'
+import type { Profile, RulesData } from '@src/types/settings'
 import { safeRegex } from '@src/utils/Regex'
 import { changeElement, formatValue, getId, grabInputs, inspectElement } from './formUtils'
 
-function fillForms(profile: { [key: string]: ProfileItem }, rulesData: RulesData) {
+
+function fillForms(profile: Profile, rulesData: RulesData) {
 	const mode = "insert";
 	const detect = "body";
 	const typesRegex = new RegExp("^(text|email|password|search|tel|url)$");
@@ -51,13 +52,11 @@ function fillForms(profile: { [key: string]: ProfileItem }, rulesData: RulesData
 		founds.set(input, arr);
 	};
 	
-	/**
-	 * Decide which rule has the highest 'certainty' for the element
-	 */
-	const decide = (input: Element): string => {
+	const decide = (input: Element, profile: Profile): string => {
+		const fileRules = Object.keys(profile).filter((key) => profile[key].type === "file");
 		const arr = founds.get(input) || [];
 		const max = Math.max(...arr.map((o) => o.certainty));
-		const candidates = arr.filter((o) => o.certainty === max);
+		let candidates = arr.filter((o) => o.certainty === max);
 		const inputName = getId(input as HTMLElement);
 		
 		candidates.sort((a, b) => {
@@ -69,7 +68,40 @@ function fillForms(profile: { [key: string]: ProfileItem }, rulesData: RulesData
 				return 0;
 			}
 		});
-		return candidates[0].name;
+		
+		if (input instanceof HTMLInputElement) {
+			if (input.type === "file") {
+				candidates = candidates.filter((o) => fileRules.includes(o.name));
+				if (candidates.length === 0) {
+					return fileRules[0];
+				}
+			} else {
+				const inputText = input.outerHTML;
+				if (candidates.length > 1) {
+					candidates.sort((a, b) => {
+						let matchA = (a.regexp.exec(inputText) || [""])[0];
+						let matchB = (b.regexp.exec(inputText) || [""])[0];
+						
+						const lenMatchA = matchA.length;
+						const lenMatchB = matchB.length;
+						
+						if (lenMatchB !== lenMatchA) {
+							return lenMatchB - lenMatchA;
+						}
+						
+						const lenNameA = (a.regexp.exec(inputName) || [""])[0].length;
+						const lenNameB = (b.regexp.exec(inputName) || [""])[0].length;
+						return lenNameB - lenNameA;
+					});
+				}
+			}
+		}
+		
+		if (candidates.length > 0) {
+			return candidates[0].name;
+		}
+		
+		return '';
 	};
 	
 	// Filter and compile rules by current URL
@@ -83,7 +115,6 @@ function fillForms(profile: { [key: string]: ProfileItem }, rulesData: RulesData
 			const fieldRegex = safeRegex(fieldRaw);
 			
 			if (!siteRegex || !fieldRegex) {
-				console.warn(`[fillForms] Skip rule "${key}" because of invalid RegExp.`);
 				return null;
 			}
 			return {
@@ -146,9 +177,11 @@ function fillForms(profile: { [key: string]: ProfileItem }, rulesData: RulesData
 		inputs
 			.filter((input) => founds.has(input))
 			.forEach((element) => {
-				const key = decide(element);
+				
+				const key = decide(element, profile);
+				
 				const rawValue = profile[key]?.value || "";
-				const value: string = typeof rawValue === "string" ? rawValue : (rawValue as { name: string; content: string; }).content; // Type assertion for value
+				const value: string = typeof rawValue === "string" ? rawValue : (rawValue as { name: string; content: string; }).content;
 				
 				if (element instanceof HTMLInputElement) {
 					if (element.type === "radio") {
@@ -162,7 +195,6 @@ function fillForms(profile: { [key: string]: ProfileItem }, rulesData: RulesData
 						element.checked = Boolean(value);
 						changeElement(element, " ");
 					} else if (element.type === "file") {
-						console.warn('Attempting to automatically fill the \'file\' input field:', element)
 						if (rawValue && (rawValue as { name: string; content: string; }).content && (rawValue as { name: string; content: string; }).name) {
 							try {
 								const rawValueTyped = rawValue as { name: string; content: string; };
@@ -188,12 +220,10 @@ function fillForms(profile: { [key: string]: ProfileItem }, rulesData: RulesData
 							} catch (error) {
 								console.error('Error creating Blob/File from base64 and trying to fill input type=\'file\':', error, element)
 								console.warn('Automatic filling of the \'file\' input field failed:', element, 'Please fill in the field manually.')
-								element.classList.add('smart-form-fill-file-field-error')
 							}
 						} else {
 							console.warn('Insufficient data to fill the file input (no content or name in profile):', element, rawValue)
 							console.warn('Automatic filling of the \'file\' input field failed:', element, 'Please fill in the field manually.')
-							element.classList.add('smart-form-fill-file-field-error')
 						}
 					}
 					else {
