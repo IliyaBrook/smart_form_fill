@@ -1,4 +1,5 @@
 import type { Profile, RulesData } from '@src/types/settings'
+import getElementsByXPath from '@src/utils/getElementsByXPath'
 import { safeRegex } from '@src/utils/Regex'
 import { changeElement, formatValue, getId, grabInputs, inspectElement } from './formUtils'
 
@@ -43,9 +44,6 @@ function fillForms(profile: Profile, rulesData: RulesData) {
 
 	inputs = inputs.filter((e, i, arr) => arr.indexOf(e) === i);
 	
-	/**
-	 * Append a found match into the 'founds' map
-	 */
 	const append = (input: Element, name: string, regexp: RegExp, certainty = 1) => {
 		const arr = founds.get(input) || [];
 		arr.push({ name, regexp, certainty });
@@ -127,7 +125,7 @@ function fillForms(profile: Profile, rulesData: RulesData) {
 		.filter((rule) => rule!.siteRegex.test(currentUrl))
 		.reverse() as Array<{ name: string; siteRegex: RegExp; fieldRegex: RegExp }>;
 	
-	// Stage 1: check element name or id
+	// Stage 1: check element name, id, and label text
 	inputs.forEach((input) => {
 		for (const rule of applicableRules) {
 			const expStr = rule.fieldRegex.source;
@@ -139,8 +137,11 @@ function fillForms(profile: Profile, rulesData: RulesData) {
 				}
 			} else {
 				const inputName = getId(input as HTMLElement);
-				if (rule.fieldRegex.test(inputName)) {
-					append(input, rule.name, rule.fieldRegex, 0.5);
+				const label = getElementsByXPath(`//label[@for="${input.id}"]`, input.form || document);
+				const labelText = label.length > 0 ? label[0].textContent?.trim() : '';
+				if (rule.fieldRegex.test(inputName) || rule.fieldRegex.test(labelText)) {
+					const certainty = rule.fieldRegex.test(labelText) ? 0.75 : 0.5;
+					append(input, rule.name, rule.fieldRegex, certainty);
 				}
 			}
 		}
@@ -192,7 +193,7 @@ function fillForms(profile: Profile, rulesData: RulesData) {
 							element.click();
 						}
 					} else if (element.type === "checkbox") {
-						element.checked = Boolean(value);
+						element.checked = value.toLowerCase() === "true";
 						changeElement(element, " ");
 					} else if (element.type === "file") {
 						if (rawValue && (rawValue as { name: string; content: string; }).content && (rawValue as { name: string; content: string; }).name) {

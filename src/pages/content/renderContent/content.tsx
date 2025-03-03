@@ -7,7 +7,12 @@ import { useEffect } from 'react'
 
 export default function Content() {
 	const rulesData: RulesData = useStorage(rulesStorage)
-	const { profiles, activeProfile }: FormProfilesData = useStorage(formProfileStorage)
+	const { profiles, activeProfile, profileNames }: FormProfilesData = useStorage(formProfileStorage)
+	console.log("[formProfileStorage] profiles:", profiles)
+	console.log("[formProfileStorage] activeProfile:", activeProfile)
+	console.log("[formProfileStorage] profileNames:", profileNames)
+	console.log("--------------------------------------")
+	console.log("[rulesData]:", rulesData)
 	
 	useEffect(() => {
 		// Message handler

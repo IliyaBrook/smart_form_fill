@@ -31,8 +31,9 @@
         "src/pages/content/index.js"
       ],
       "css": [
-        "assets/css/contentStyle17406654157.chunk.css"
-      ]
+        "assets/css/contentStyle17409657104.chunk.css"
+      ],
+      "all_frames": true
     }
   ],
   "web_accessible_resources": [
