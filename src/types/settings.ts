@@ -1,4 +1,4 @@
-export type InputFieldType = 'text' | 'textarea' | 'file'
+export type InputFieldType = 'text' | 'textarea' | 'file' | 'checkbox' | 'boolean' | 'empty'
 
 export interface ProfileItem {
 	name: string;

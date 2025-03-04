@@ -278,7 +278,10 @@ const FormProfile = () => {
 					options={[
 						{ value: 'text', label: 'Text' },
 						{ value: 'textarea', label: 'Textarea' },
-						{ value: 'file', label: 'File' }
+						{ value: 'file', label: 'File' },
+						{ value: 'checkbox', label: 'Checkbox' },
+						{ value: 'boolean', label: 'Boolean' },
+						{ value: 'empty', label: 'Empty' }
 					]}
 				/>
 			)
@@ -296,7 +299,23 @@ const FormProfile = () => {
 							onBlur={(e) => handleProfileItemChange(record.key, 'value', e.target.value)}
 						/>
 					)
-				} else if (record.type === 'textarea') {
+				}if (record.type === 'empty' || record.type === 'checkbox') {
+					handleProfileItemChange(record.key, 'value', " ")
+				}else  if (record.type === 'boolean') {
+					return (
+						<Select
+							defaultValue={typeof record.value === 'string' ? record.value : false}
+							options={[
+								{ value: true, label: 'True' },
+								{ value: false, label: 'False' }
+							]}
+							onChange={(value: string) => {
+								void handleProfileItemChange(record.key, 'value', value)
+							}}
+						/>
+					)
+				}
+				else if (record.type === 'textarea') {
 					return (
 						<TextArea
 							key={`${record.key}_textarea`}
