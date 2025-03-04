@@ -104,8 +104,12 @@ function fillForms(profile: Profile, rulesData: RulesData) {
 	
 	// Filter and compile rules by current URL
 	const currentUrl = window.location.href;
+	console.log("[rulesData]: ", rulesData)
+	
 	const applicableRules = Object.keys(rulesData)
 		.map((key) => {
+			console.log("[applicableRules key]:", key)
+			
 			const siteRaw = rulesData[key]["site-rule"];
 			const fieldRaw = rulesData[key]["field-rule"];
 			
@@ -182,6 +186,11 @@ function fillForms(profile: Profile, rulesData: RulesData) {
 				const rawValue = profile[key]?.value || "";
 				const value: string = typeof rawValue === "string" ? rawValue : (rawValue as { name: string; content: string; }).content;
 				const rule = applicableRules.find((rule) => rule.name === key);
+				console.log("[key]:", key)
+				console.log("[rawValue]:", rawValue)
+				console.log("[value]:", value)
+				console.log("[rule]:", rule)
+				
 				const elementText = element.outerHTML.toLowerCase()
 				if (element instanceof HTMLInputElement) {
 					if (element.type === "radio") {

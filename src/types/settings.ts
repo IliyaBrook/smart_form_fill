@@ -1,4 +1,16 @@
-export type InputFieldType = 'text' | 'textarea' | 'file' | 'checkbox' | 'boolean' | 'empty'
+export enum typeOption {
+	Text = 'text',
+	TextArea = 'textarea',
+	File = 'file',
+	Checkbox = 'checkbox',
+	Boolean = 'boolean',
+	None = 'none',
+	Select = 'select',
+}
+
+export type InputFieldType = (typeof typeOption)[keyof typeof typeOption];
+
+export const InputFieldOptions = Array.from(Object.values(typeOption))
 
 export interface ProfileItem {
 	name: string;
@@ -19,6 +31,8 @@ export interface FormProfilesData {
 export interface RuleItem {
 	'field-rule': string;
 	'site-rule': string;
+	'rule-name': string;
+	 type: InputFieldType;
 }
 
 export interface RulesData {

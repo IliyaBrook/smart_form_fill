@@ -1,9 +1,10 @@
-import { UploadOutlined } from '@ant-design/icons'
+import { CheckSquareOutlined, UploadOutlined } from '@ant-design/icons'
 import DefaultProfileTooltip from '@pages/settings/formProfile/defaultProfileTooltip'
 import TextArea from '@src/components/TextArea'
 import { useStorage } from '@src/hooks'
 import formProfileStorage from '@src/storage/formProfileStorage'
-import type { ProfileItem } from '@src/types/settings'
+import { InputFieldOptions, type InputFieldType, type ProfileItem, typeOption } from '@src/types/settings'
+// import { InputFieldOptions, type ProfileItem } from '@src/types/settings'
 import findAndGroupDuplicates from '@src/utils/findAndGroupDuplicates'
 import findKeysByValue from '@src/utils/findKeyByValue'
 import { Button, Input, message, Select, Table, Upload, type UploadProps } from 'antd'
@@ -16,7 +17,7 @@ const FormProfile = () => {
 	const [newProfileName, setNewProfileName] = useState<string>('')
 	const isDefaultProfile = activeProfile === 'default'
 	const [isReady, setIsReady] = useState(false)
-
+	
 	useEffect(() => {
 		setTimeout(() => {
 			setIsReady(true)
@@ -43,7 +44,7 @@ const FormProfile = () => {
 		setIsReady(false)
 		void formProfileStorage.set(prev => {
 			const newProfile = { ...prev.profiles[prev.activeProfile] }
-			newProfile[`newKey_${Date.now()}`] = { name: '', value: '', type: 'text' }
+			newProfile[`newKey_${Date.now()}`] = { name: '', value: '', type: typeOption.Text }
 			return {
 				...prev,
 				profiles: {
@@ -209,7 +210,7 @@ const FormProfile = () => {
 									name: info.file.name,
 									content: e.target.result.split(',')[1]
 								},
-								type: 'file'
+								type: typeOption.File
 							}
 						}
 					}
@@ -248,7 +249,7 @@ const FormProfile = () => {
 			})
 		}
 	}
-	
+	// const columns: ColumnsType<ProfileItem & { key: string }> = [
 	const columns: ColumnsType<ProfileItem & { key: string }> = [
 		{
 			title: 'Rule Name',
@@ -271,18 +272,11 @@ const FormProfile = () => {
 			key: 'type',
 			render: (_, record) => (
 				<Select
-					className="w-full"
+					className='w-full'
 					key={record.key}
 					value={record.type}
 					onChange={(value) => handleProfileItemChange(record.key, 'type', value)}
-					options={[
-						{ value: 'text', label: 'Text' },
-						{ value: 'textarea', label: 'Textarea' },
-						{ value: 'file', label: 'File' },
-						{ value: 'checkbox', label: 'Checkbox' },
-						{ value: 'boolean', label: 'Boolean' },
-						{ value: 'empty', label: 'Empty' }
-					]}
+					options={InputFieldOptions.map(op => ({ value: op, label: op.charAt(0).toUpperCase() + op.slice(1) }))}
 				/>
 			)
 		},
@@ -291,7 +285,7 @@ const FormProfile = () => {
 			dataIndex: 'value',
 			key: 'value',
 			render: (_, record) => {
-				if (record.type === 'text') {
+				if (record.type === typeOption.Text) {
 					return (
 						<Input
 							key={`${record.key}_text`}
@@ -299,11 +293,23 @@ const FormProfile = () => {
 							onBlur={(e) => handleProfileItemChange(record.key, 'value', e.target.value)}
 						/>
 					)
-				}if (record.type === 'empty' || record.type === 'checkbox') {
-					handleProfileItemChange(record.key, 'value', " ")
-				}else  if (record.type === 'boolean') {
+				}else if (record.type === typeOption.None) {
+					handleProfileItemChange(record.key, 'value', null);
+					return <span>No value set</span>
+				} else if (record.type === typeOption.Checkbox) {
+					handleProfileItemChange(record.key, 'value', null);
+					return (
+						<div
+							className='flex items-center justify-center w-6 h-6 border-[0.5px]'
+							key={record.key}
+						>
+							✔
+						</div>
+					)
+				} else if (record.type === typeOption.Boolean || record.type === typeOption.Select) {
 					return (
 						<Select
+							className="w-fit"
 							defaultValue={typeof record.value === 'string' ? record.value : false}
 							options={[
 								{ value: true, label: 'True' },
@@ -314,8 +320,7 @@ const FormProfile = () => {
 							}}
 						/>
 					)
-				}
-				else if (record.type === 'textarea') {
+				} else if (record.type === typeOption.TextArea) {
 					return (
 						<TextArea
 							key={`${record.key}_textarea`}
@@ -323,9 +328,9 @@ const FormProfile = () => {
 							onBlur={(e) => handleProfileItemChange(record.key, 'value', e.target.value)}
 						/>
 					)
-				} else if (record.type === 'file') {
+				} else if (record.type === typeOption.File) {
 					const uploadProps: UploadProps = {
-						name: 'file',
+						name: typeOption.File,
 						showUploadList: false,
 						onChange: (info) => handleFileUpload(info, record.key)
 					}

@@ -18,7 +18,7 @@ const GeneralSettings: React.FC = () => {
 			const hour = now.getHours();
 			const minute = now.getMinutes();
 			link.href = url;
-			link.download = `autoapply_settings_${day}_${month}_[${hour}_${minute}].json`;
+			link.download = `smart_form_fill_settings_${day}_${month}_[${hour}_${minute}].json`;
 			link.click();
 			URL.revokeObjectURL(url);
 		});
@@ -88,7 +88,7 @@ const GeneralSettings: React.FC = () => {
 	
 	return (
 		<div className="p-4">
-			<h2 className="text-xl font-semibold mb-4">GeneralSettings</h2>
+			<h2 className="text-xl font-semibold mb-4">General Settings:</h2>
 			<div className="mb-4">
 				<Button type="primary" icon={<DownloadOutlined />} onClick={handleExport}>
 					Export

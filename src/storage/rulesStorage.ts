@@ -3,6 +3,7 @@ import type { RulesData } from '@src/types/settings'
 import { StorageEnum } from '@src/types/storage'
 import initialRulesData from './initialData/defaultRules.json'
 
+// @ts-ignore
 const rulesStorage = createStorage<RulesData>('rules', initialRulesData, {
 	storageEnum: StorageEnum.Local,
 	liveUpdate: true,
