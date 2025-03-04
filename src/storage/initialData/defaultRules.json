@@ -1,195 +1,214 @@
 {
-	"birth-day-type-1": {
-		"field-rule": "(?:dd)|(?:bday)|(?:birth\\w?day)|(?:dob\\w?day)|(?:birth\\w*1)",
-		"site-rule": "(?:)"
-	},
-	"birth-day-type-2": {
-		"field-rule": "(?:dd)|(?:bday)|(?:birth\\w?day)|(?:dob\\w?day)|(?:birth\\w*1)",
-		"site-rule": "(?:)"
-	},
-	"birth-month-number-type-1": {
-		"field-rule": "(?:mm)|(?:bmon)|(?:birth\\w?mon)|(?:dob\\w?mon)|(?:birth\\w*2)",
-		"site-rule": "(?:)"
-	},
-	"birth-month-number-type-2": {
-		"field-rule": "(?:mm)|(?:bmon)|(?:birth\\w?mon)|(?:dob\\w?mon)|(?:birth\\w*2)",
-		"site-rule": "(?:)"
-	},
-	"birth-month-string": {
-		"field-rule": "(?:mm)|(?:bmon)|(?:birth\\w?mon)|(?:dob\\w?mon)|(?:birth\\w*2)",
-		"site-rule": "(?:)"
-	},
-	"birth-year": {
-		"field-rule": "(?:yy)|(?:byear)|(?:birth\\w?year)|(?:dob\\w?year)|(?:birth\\w*3)",
-		"site-rule": "(?:)"
-	},
-	"full-street": {
-		"field-rule": "(?:street)|(?:addr)",
-		"site-rule": "(?:)"
-	},
-	"full-name": {
-		"field-rule": "(?:fullname)|(?:full-name)|(?:name)",
-		"site-rule": "(?:)"
-	},
-	"state": {
-		"field-rule": "(?:state)|(?:prov)|(?:region)",
-		"site-rule": "(?:)"
-	},
-	"zip-code": {
-		"field-rule": "(?:zip[-_])|(?:[-_]zip)|(?:zip)|(?:post[\\w\\s]*code)",
-		"site-rule": "(?:)"
-	},
-	
 	"user-name": {
-		"field-rule": "(?:username)",
-		"site-rule": "(?:)"
-	},
-	"title": {
-		"field-rule": "(?:title)",
-		"site-rule": "(?:)"
-	},
-	"gender": {
-		"field-rule": "(?:gender)|(?:sex)",
-		"site-rule": "(?:)"
-	},
-	"lang": {
-		"field-rule": "lang",
-		"site-rule": "(?:)"
-	},
-	"age": {
-		"field-rule": "(?:age)",
-		"site-rule": "(?:)"
-	},
-	"phone": {
-		"field-rule": "(?:phone)",
-		"site-rule": "(?:)"
-	},
-	"phone-number": {
-		"field-rule": "(?:phone)|(?:tel)|(?:phon)",
-		"site-rule": "(?:)"
-	},
-	"location": {
-		"field-rule": "(?:Current location)|(?:Current location)",
-		"site-rule": "(?:)"
-	},
-	"cv": {
-		"field-rule": "(?:cv)|(?:resume)",
-		"site-rule": "(?:)"
-	},
-	"coverletter": {
-		"field-rule": "(?:cover)",
-		"site-rule": "(?:)"
-	},
-	"about-me": {
-		"field-rule": "(?:comment)|(?:description)|(?:aboutMe)",
-		"site-rule": "(?:)"
-	},
-	"flexible": {
-		"field-rule": "(?:flexible)",
-		"site-rule": "(?:)"
-	},
-	"salary": {
-		"field-rule": "(?:salary)",
-		"site-rule": "(?:)"
-	},
-	"education": {
-		"field-rule": "(?:education)",
-		"site-rule": "(?:)"
-	},
-	"notice-period": {
-		"field-rule": "(?:notice)",
-		"site-rule": "(?:)"
-	},
-	"agreement": {
-		"field-rule": "(?:agreement)",
-		"site-rule": "(?:)"
-	},
-	"first-name": {
-		"field-rule": "(?:fname)|(?:first[\\w\\s]*name)|(?:frst[\\w\\s]*name)|(?:name[\\w\\s]*first)",
-		"site-rule": "(?:)"
-	},
-	"middle-name": {
-		"field-rule": "(?:middle[\\w\\s]*name)|(?:name[\\w\\s]*middle)|(?:middle[\\w\\s]*i)",
-		"site-rule": "(?:)"
-	},
-	"last-name": {
-		"field-rule": "(?:lname)|(?:last[\\w\\s]*name)|(?:name[\\w\\s]*last)",
-		"site-rule": "(?:)"
-	},
-	"name-suffix": {
-		"field-rule": "(?:suffix[\\w\\s]*name)|(?:name[\\w\\s]*suffix)",
-		"site-rule": "(?:)"
-	},
-	"website": {
-		"field-rule": "(?:website)|(?:homepage)|(?:custom-question-website)",
-		"site-rule": "(?:)"
+		"site-rule": "(?:)",
+		"field-rule": "(?:username)"
 	},
 	"email": {
-		"field-rule": "(?:mail)",
-		"site-rule": "(?:)"
+		"site-rule": "(?:)",
+		"field-rule": "(?:email)"
+	},
+	"title": {
+		"site-rule": "(?:)",
+		"field-rule": "(?:title)"
+	},
+	"gender": {
+		"site-rule": "(?:)",
+		"field-rule": "(?:gender)|(?:sex)"
+	},
+	"age": {
+		"site-rule": "(?:)",
+		"field-rule": "(?:age)"
+	},
+	"first-name": {
+		"site-rule": "(?:)",
+		"field-rule": "(?:fname)|(?:first[\\w\\s]*name)|(?:frst[\\w\\s]*name)|(?:name[\\w\\s]*first)"
+	},
+	"middle-name": {
+		"site-rule": "(?:)",
+		"field-rule": "(?:middle[-_\\s]?name)"
+	},
+	"last-name": {
+		"site-rule": "(?:)",
+		"field-rule": "(?:last[-_\\s]?name)"
+	},
+	"name-suffix": {
+		"site-rule": "(?:)",
+		"field-rule": "(?:name[-_\\s]?suffix)"
+	},
+	"full-name": {
+		"site-rule": "(?:)",
+		"field-rule": "(?:full[-_\\s]?name)"
 	},
 	"street-line-1": {
-		"field-rule": "(?:(?:street)|(?:addr))\\w*1",
-		"site-rule": "(?:)"
+		"site-rule": "(?:)",
+		"field-rule": "(?:(?:street)|(?:addr))\\w*1"
 	},
 	"street-line-2": {
-		"field-rule": "(?:(?:street)|(?:addr))\\w*2",
-		"site-rule": "(?:)"
+		"site-rule": "(?:)",
+		"field-rule": "(?:(?:street)|(?:addr))\\w*2"
 	},
 	"street-line-3": {
-		"field-rule": "(?:(?:street)|(?:addr))\\w*3",
-		"site-rule": "(?:)"
+		"site-rule": "(?:)",
+		"field-rule": "(?:(?:street)|(?:addr))\\w*3"
+	},
+	"full-street": {
+		"site-rule": "(?:)",
+		"field-rule": "(?:street)|(?:addr)"
 	},
 	"city": {
-		"field-rule": "city",
-		"site-rule": "(?:)"
+		"site-rule": "(?:)",
+		"field-rule": "(?:city)"
+	},
+	"state": {
+		"site-rule": "(?:)",
+		"field-rule": "(?:state)|(?:prov)|(?:region)"
+	},
+	"zip-code": {
+		"site-rule": "(?:)",
+		"field-rule": "(?:zip[-_])|(?:[-_]zip)|(?:zip)|(?:post[\\w\\s]*code)"
 	},
 	"country-code": {
-		"field-rule": "(?:country[\\w\\s]*code)|(?:phone[\\w\\s]*country)",
-		"site-rule": "(?:)"
+		"site-rule": "(?:)",
+		"field-rule": "(?:country[\\w\\s]*code)|(?:phone[\\w\\s]*country)"
 	},
 	"country": {
-		"field-rule": "country",
-		"site-rule": "(?:)"
+		"site-rule": "(?:)",
+		"field-rule": "(?:country[\\w\\s]*code)|(?:phone[\\w\\s]*country)"
+	},
+	"lang": {
+		"site-rule": "(?:)",
+		"field-rule": "(?:lang)"
+	},
+	"birth-day-type-1": {
+		"site-rule": "(?:)",
+		"field-rule": "(?:birth[-_\\s]?day)"
+	},
+	"birth-day-type-2": {
+		"site-rule": "(?:)",
+		"field-rule": "(?:mm)|(?:bmon)|(?:birth\\w?mon)|(?:dob\\w?mon)|(?:birth\\w*2)"
+	},
+	"birth-month-number-type-1": {
+		"site-rule": "(?:)",
+		"field-rule": "(?:mm)|(?:bmon)|(?:birth\\w?mon)|((?:dd)|(?:bday)|(?:birth\\w?day)|(?:dob\\w?day)|(?:birth\\w*1)?:dob\\w?mon)|(?:birth\\w*2)"
+	},
+	"birth-month-number-type-2": {
+		"site-rule": "(?:)",
+		"field-rule": "(?:mm)|(?:bmon)|(?:birth\\w?mon)|(?:dob\\w?mon)|(?:birth\\w*2)"
+	},
+	"birth-month-string": {
+		"site-rule": "(?:)",
+		"field-rule": "(?:mm)|(?:bmon)|(?:birth\\w?mon)|(?:dob\\w?mon)|(?:birth\\w*2)"
+	},
+	"birth-year": {
+		"site-rule": "(?:)",
+		"field-rule": "(?:yy)|(?:byear)|(?:birth\\w?year)|(?:dob\\w?year)|(?:birth\\w*3)"
 	},
 	"company": {
-		"field-rule": "company",
-		"site-rule": "(?:)"
+		"site-rule": "(?:)",
+		"field-rule": "(?:company)"
+	},
+	"phone": {
+		"site-rule": "(?:)",
+		"field-rule": "(?:phone)"
+	},
+	"comment": {
+		"site-rule": "(?:)",
+		"field-rule": "(?:commnt)|(?:comment)|(?:description)"
+	},
+	"linkedin": {
+		"site-rule": "(?:)",
+		"field-rule": "(?:linkedin)|(?:linke)"
+	},
+	"street": {
+		"site-rule": "(?:)",
+		"field-rule": "(?:street)|(?:addr)"
+	},
+	"github": {
+		"site-rule": "(?:)",
+		"field-rule": "(?:github)|(?:git)|(?:website)"
+	},
+	"phone-number": {
+		"site-rule": "(?:)",
+		"field-rule": "(?:phone)|(?:tel)|(?:phon)"
+	},
+	"location": {
+		"site-rule": "(?:)",
+		"field-rule": "(?:Current location)|(?:Current location)"
+	},
+	"cv": {
+		"site-rule": "(?:)",
+		"field-rule": "(?:cv)|(?:resume)"
+	},
+	"coverletter": {
+		"site-rule": "(?:)",
+		"field-rule": "(?:cover)"
+	},
+	"note": {
+		"site-rule": "(?:)",
+		"field-rule": "(?:comment)|(?:description)|(?:aboutMe)"
+	},
+	"flexible": {
+		"site-rule": "(?:)",
+		"field-rule": "(?:flexible)"
+	},
+	"agreement": {
+		"site-rule": "(?:)",
+		"field-rule": "(?:agreement)"
+	},
+	"salary": {
+		"site-rule": "(?:)",
+		"field-rule": "(?:salary)"
+	},
+	"education": {
+		"site-rule": "(?:)",
+		"field-rule": "(?:education)"
+	},
+	"Notice Period": {
+		"site-rule": "(?:)",
+		"field-rule": "(?:notice)"
+	},
+	"Do you have any": {
+		"site-rule": "(?:)",
+		"field-rule": "(?:Do you have any)"
 	},
 	"homepage": {
-		"field-rule": "(?:homepage)",
-		"site-rule": "(?:)"
+		"site-rule": "(?:)",
+		"field-rule": "(?:homepage)"
 	},
-	"phone-extension": {
-		"field-rule": "(?:homepage)",
-		"site-rule": "(?:)"
-	},
-	"How did you hear about?": {
-		"field-rule": "(?=.*hear)(?=.*about).*",
-		"site-rule": "(?:)"
-	},
-	"Accept the Privacy Policy": {
-		"field-rule": "(?:agreement)|(?:Privacy)",
-		"site-rule": "(?:)"
-	},
-	"Bachelor's Degree": {
-		"field-rule": "(?:degree)|(?:bachelor)",
-		"site-rule": "(?:)"
-	},
-	"require visa": {
-		"field-rule": "(?:visa)",
-		"site-rule": "(?:)"
-	},
-	"legally": {
-		"field-rule": "(?:legally)",
-		"site-rule": "(?:)"
-	},
-	"Have you ever worked": {
-		"field-rule": "(?:have you ever worked)",
-		"site-rule": "(?:)"
+	"Web3": {
+		"site-rule": "(?:)",
+		"field-rule": "(?:web3)"
 	},
 	"Phone Extension": {
-		"field-rule": "(?:phone Extension)",
-		"site-rule": "(?:)"
+		"site-rule": "(?:)",
+		"field-rule": "(?:phone Extension)"
+	},
+	"Have you ever worked": {
+		"site-rule": "(?:)",
+		"field-rule": "(?:have you ever worked)"
+	},
+	"legally": {
+		"site-rule": "(?:)",
+		"field-rule": "(?:legally)"
+	},
+	"require visa": {
+		"site-rule": "(?:)",
+		"field-rule": "(?:visa)"
+	},
+	"Bachelor's Degree": {
+		"site-rule": "(?:)",
+		"field-rule": "(?:degree)|(?:bachelor)"
+	},
+	"How did you hear about?": {
+		"site-rule": "(?:)",
+		"field-rule": "(?=.*hear)(?=.*about).*"
+	},
+	"Accept the Privacy Policy": {
+		"site-rule": "(?:)",
+		"field-rule": "(?:agreement)|(?:Privacy)"
+	},
+	"website": {
+		"site-rule": "(?:)",
+		"field-rule": "(?:website)|(?:homepage)|(?:custom-question-website)"
 	}
 }

@@ -1,17 +1,12 @@
 {
-	"user-name": {
-		"name": "user-name",
-		"value": "my-user-name",
-		"type": "text"
-	},
 	"email": {
 		"name": "email",
-		"value": "me@mydomain.com",
+		"value": "email",
 		"type": "text"
 	},
 	"title": {
 		"name": "title",
-		"value": "Mr.",
+		"value": "Full stack web developer",
 		"type": "text"
 	},
 	"gender": {
@@ -21,57 +16,32 @@
 	},
 	"age": {
 		"name": "age",
-		"value": "30",
+		"value": "your age",
 		"type": "text"
 	},
 	"first-name": {
 		"name": "first-name",
-		"value": "my first name",
+		"value": "first name",
 		"type": "text"
 	},
 	"middle-name": {
 		"name": "middle-name",
-		"value": "my middle name",
+		"value": "No",
 		"type": "text"
 	},
 	"last-name": {
 		"name": "last-name",
-		"value": "my last name",
-		"type": "text"
-	},
-	"name-suffix": {
-		"name": "name-suffix",
-		"value": "my name suffix",
+		"value": "last-name",
 		"type": "text"
 	},
 	"full-name": {
 		"name": "full-name",
-		"value": "my full name",
-		"type": "text"
-	},
-	"street-line-1": {
-		"name": "street-line-1",
-		"value": "street address line number one",
-		"type": "text"
-	},
-	"street-line-2": {
-		"name": "street-line-2",
-		"value": "street address line number two",
-		"type": "text"
-	},
-	"street-line-3": {
-		"name": "street-line-3",
-		"value": "street address line number three",
-		"type": "text"
-	},
-	"full-street": {
-		"name": "full-street",
-		"value": "full street address",
+		"value": "full-name",
 		"type": "text"
 	},
 	"city": {
 		"name": "city",
-		"value": "city name",
+		"value": "city",
 		"type": "text"
 	},
 	"state": {
@@ -81,72 +51,175 @@
 	},
 	"zip-code": {
 		"name": "zip-code",
-		"value": "zip code or postal code",
+		"value": "07008",
 		"type": "text"
 	},
 	"country-code": {
 		"name": "country-code",
-		"value": "US",
+		"value": "Us",
 		"type": "text"
 	},
 	"country": {
 		"name": "country",
-		"value": "country name",
+		"value": "United States",
 		"type": "text"
 	},
 	"lang": {
 		"name": "lang",
-		"value": "language",
+		"value": "Eng",
 		"type": "text"
 	},
 	"birth-day-type-1": {
 		"name": "birth-day-type-1",
-		"value": "1",
+		"value": "22",
 		"type": "text"
 	},
 	"birth-day-type-2": {
 		"name": "birth-day-type-2",
-		"value": "01",
+		"value": "22",
 		"type": "text"
 	},
 	"birth-month-number-type-1": {
 		"name": "birth-month-number-type-1",
-		"value": "1",
+		"value": "12",
 		"type": "text"
 	},
 	"birth-month-number-type-2": {
 		"name": "birth-month-number-type-2",
-		"value": "01",
+		"value": "12",
 		"type": "text"
 	},
 	"birth-month-string": {
 		"name": "birth-month-string",
-		"value": "January",
-		"type": "text"
-	},
-	"birth-year": {
-		"name": "birth-year",
-		"value": "1971",
+		"value": "December",
 		"type": "text"
 	},
 	"company": {
 		"name": "company",
-		"value": "company name",
+		"value": "company",
 		"type": "text"
 	},
 	"phone": {
 		"name": "phone",
-		"value": "(123) 456-7890",
+		"value": "+15555551234",
+		"type": "text"
+	},
+	"linkedin": {
+		"name": "linkedin",
+		"value": "https://www.linkedin.com/in/iliya-brook",
+		"type": "text"
+	},
+	"street": {
+		"name": "street",
+		"value": "Street",
+		"type": "text"
+	},
+	"full-street": {
+		"name": "full-street",
+		"value": "full-street",
+		"type": "text"
+	},
+	"github": {
+		"name": "github",
+		"value": "https://github.com/IliyaBrook",
+		"type": "text"
+	},
+	"phone-number": {
+		"name": "phone-number",
+		"value": "+972555555555",
+		"type": "text"
+	},
+	"location": {
+		"name": "location",
+		"value": "location",
+		"type": "text"
+	},
+	"cv": {
+		"name": "cv",
+		"value": {
+			"name": "example_cv_file_please_change.pdf",
+			"content": "JVBERi0xLjcN+CnN0YXJ0eHJlZgo1NzY1NgolJUVPRgo="
+		},
+		"type": "file"
+	},
+	"note": {
+		"name": "note",
+		"value": "Hello! I'm Iliya Brook, a Full-Stack Developer with 4 years of experience.   Skilled in React, Node.js, TypeScript, JavaScript, and MongoDB.   Proficient in Material-UI, Bootstrap, Redux, Docker, Kubernetes, Google Cloud,   GraphQL, MySQL, Apollo, HTML, CSS/SCSS, and GitHub.   Looking forward to new opportunities!",
+		"type": "textarea"
+	},
+	"flexible": {
+		"name": "flexible",
+		"value": "true",
+		"type": "text"
+	},
+	"agreement": {
+		"name": "agreement",
+		"value": "true",
+		"type": "text"
+	},
+	"salary": {
+		"name": "salary",
+		"value": "20.000",
+		"type": "text"
+	},
+	"education": {
+		"name": "education",
+		"value": "education",
+		"type": "text"
+	},
+	"Notice Period": {
+		"name": "Notice Period",
+		"value": "30",
+		"type": "text"
+	},
+	"Do you have any": {
+		"name": "Do you have any",
+		"value": "Yes",
+		"type": "text"
+	},
+	"Web3": {
+		"name": "Web3",
+		"value": "no",
 		"type": "text"
 	},
 	"homepage": {
 		"name": "homepage",
-		"value": "http://my-home-page.com",
+		"value": "https://yourhomepage.com",
 		"type": "text"
 	},
-	"about-me": {
-		"name": "comment",
-		"value": "this is a comment",
+	"Phone Extension": {
+		"name": "Phone Extension",
+		"value": " ",
+		"type": "empty"
+	},
+	"Have you ever worked": {
+		"name": "Have you ever worked",
+		"value": "no",
+		"type": "boolean"
+	},
+	"legally": {
+		"name": "legally",
+		"value": "yes",
+		"type": "boolean"
+	},
+	"require visa": {
+		"name": "require visa",
+		"value": "no",
+		"type": "boolean"
+	},
+	"Bachelor's Degree": {
+		"name": "Bachelor's Degree",
+		"value": "yes",
+		"type": "boolean"
+	},
+	"website": {
+		"name": "website",
+		"value": "https://github.com/IliyaBrook",
 		"type": "text"
+	},
+	"Accept the Privacy Policy": {
+		"name": "Accept the Privacy Policy",
+		"value": " ",
+		"type": "checkbox"
 	}
 }
