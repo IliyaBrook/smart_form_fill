@@ -7,7 +7,7 @@ import { changeElement, formatValue, getId, grabInputs, inspectElement } from '.
 function fillForms(profile: Profile, rulesData: RulesData) {
 	const mode = "insert";
 	const detect = "body";
-	const typesRegex = new RegExp("^(text|email|password|search|tel|url)$");
+	const typesRegex = new RegExp("^(text|email|password|search|tel|url|radio|checkbox)$");
 	
 	let inputs: (HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement)[] = [];
 	const matrix = new WeakMap<Element, number>();
@@ -178,23 +178,36 @@ function fillForms(profile: Profile, rulesData: RulesData) {
 		inputs
 			.filter((input) => founds.has(input))
 			.forEach((element) => {
-				
 				const key = decide(element, profile);
-				
 				const rawValue = profile[key]?.value || "";
 				const value: string = typeof rawValue === "string" ? rawValue : (rawValue as { name: string; content: string; }).content;
-				
+				const rule = applicableRules.find((rule) => rule.name === key);
+				const elementText = element.outerHTML.toLowerCase()
 				if (element instanceof HTMLInputElement) {
 					if (element.type === "radio") {
-						if (
-							element.value.toLowerCase() === value.toLowerCase() ||
-							(element.textContent && element.textContent.toLowerCase() === value.toLowerCase())
-						) {
-							element.click();
+						if (element instanceof HTMLInputElement) {
+							if (element.type === "radio") {
+								if (rule.fieldRegex.test(elementText) && elementText.includes(value)) {
+									element.click();
+								}
+							}
 						}
 					} else if (element.type === "checkbox") {
-						element.checked = value.toLowerCase() === "true";
-						changeElement(element, " ");
+						const label = getElementsByXPath(`//label[//input[@id="${element.id}"]]`, element.form || document);
+						const labelText = label.length > 0 ? label[0].textContent?.trim() : '';
+						if (
+							element.value.toLowerCase() === value.toLowerCase() ||
+							labelText.toLowerCase() === value.toLowerCase()
+						) {
+							element.checked = value.toLowerCase() === "true";
+							changeElement(element, " ");
+						}
+						if (rule.fieldRegex.test(elementText)) {
+							if (value.toLowerCase() === "true") {
+								element.click();
+								element.checked = value.toLowerCase() === "true";
+							}
+						}
 					} else if (element.type === "file") {
 						if (rawValue && (rawValue as { name: string; content: string; }).content && (rawValue as { name: string; content: string; }).name) {
 							try {
@@ -226,8 +239,7 @@ function fillForms(profile: Profile, rulesData: RulesData) {
 							console.warn('Insufficient data to fill the file input (no content or name in profile):', element, rawValue)
 							console.warn('Automatic filling of the \'file\' input field failed:', element, 'Please fill in the field manually.')
 						}
-					}
-					else {
+					} else {
 						const replaced = value
 							.replace(/_url_/g, window.location.href)
 							.replace(/_host_/g, window.location.hostname);

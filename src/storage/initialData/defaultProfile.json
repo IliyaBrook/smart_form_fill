@@ -134,11 +134,6 @@
 		"value": "company name",
 		"type": "text"
 	},
-	"occupation": {
-		"name": "occupation",
-		"value": "occupation",
-		"type": "text"
-	},
 	"phone": {
 		"name": "phone",
 		"value": "(123) 456-7890",
@@ -149,7 +144,7 @@
 		"value": "http://my-home-page.com",
 		"type": "text"
 	},
-	"comment": {
+	"about-me": {
 		"name": "comment",
 		"value": "this is a comment",
 		"type": "text"

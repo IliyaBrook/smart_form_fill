@@ -1,15 +1,7 @@
-import defaultProfileData from '@src/storage/initialData/defaultProfile.json'
 import { createStorage } from '@src/storage/base'
-import type { FileTypes, FormProfilesData, Profile, ProfileItem } from '@src/types/settings'
+import defaultProfileData from '@src/storage/initialData/defaultProfile.json'
+import type { FormProfilesData, Profile, ProfileItem } from '@src/types/settings'
 import { StorageEnum } from '@src/types/storage'
-
-function convertType(type: string): FileTypes {
-	if (type === 'text' || type === 'file') {
-		return type as FileTypes;
-	} else {
-		return 'text';
-	}
-}
 
 const transformProfile = (profile: Record<string, ProfileItem>): Profile => {
 	const transformedProfile: Profile = {};
@@ -17,7 +9,7 @@ const transformProfile = (profile: Record<string, ProfileItem>): Profile => {
 		transformedProfile[key] = {
 			name: key,
 			value:  value.value,
-			type: convertType(value.type) ,
+			type: value.type,
 		};
 	});
 	return transformedProfile;
@@ -47,7 +39,6 @@ const formProfileStorage = createStorage<FormProfilesData>(
 					if (typeof parsed !== 'object' || parsed === null) {
 						return initialData;
 					}
-
 					const requiredKeys: (keyof FormProfilesData)[] = [
 						'profiles',
 						'profileNames',

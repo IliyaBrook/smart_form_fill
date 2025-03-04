@@ -1,9 +1,9 @@
-export type FileTypes = 'text' | 'file'
+export type InputFieldType = 'text' | 'textarea' | 'file'
 
 export interface ProfileItem {
 	name: string;
 	value: string | { name: string; content: string };
-	type: FileTypes;
+	type: InputFieldType;
 }
 
 export interface Profile {

@@ -1,7 +1,9 @@
 import { UploadOutlined } from '@ant-design/icons'
 import DefaultProfileTooltip from '@pages/settings/formProfile/defaultProfileTooltip'
+import TextArea from '@src/components/TextArea'
 import { useStorage } from '@src/hooks'
 import formProfileStorage from '@src/storage/formProfileStorage'
+import type { ProfileItem } from '@src/types/settings'
 import findAndGroupDuplicates from '@src/utils/findAndGroupDuplicates'
 import findKeysByValue from '@src/utils/findKeyByValue'
 import { Button, Input, message, Select, Table, Upload, type UploadProps } from 'antd'
@@ -29,7 +31,6 @@ const FormProfile = () => {
 		type: currentProfile[key].type,
 		value: currentProfile[key].value
 	}))
-	
 	
 	const handleProfileChange = (value: string) => {
 		void formProfileStorage.set(prev => ({
@@ -248,7 +249,7 @@ const FormProfile = () => {
 		}
 	}
 	
-	const columns: ColumnsType<any> = [
+	const columns: ColumnsType<ProfileItem & { key: string }> = [
 		{
 			title: 'Rule Name',
 			dataIndex: 'name',
@@ -270,10 +271,15 @@ const FormProfile = () => {
 			key: 'type',
 			render: (_, record) => (
 				<Select
+					className="w-full"
 					key={record.key}
 					value={record.type}
 					onChange={(value) => handleProfileItemChange(record.key, 'type', value)}
-					options={[{ value: 'text', label: 'Text' }, { value: 'file', label: 'File' }]}
+					options={[
+						{ value: 'text', label: 'Text' },
+						{ value: 'textarea', label: 'Textarea' },
+						{ value: 'file', label: 'File' }
+					]}
 				/>
 			)
 		},
@@ -286,6 +292,14 @@ const FormProfile = () => {
 					return (
 						<Input
 							key={`${record.key}_text`}
+							defaultValue={typeof record.value === 'string' ? record.value : ''}
+							onBlur={(e) => handleProfileItemChange(record.key, 'value', e.target.value)}
+						/>
+					)
+				} else if (record.type === 'textarea') {
+					return (
+						<TextArea
+							key={`${record.key}_textarea`}
 							defaultValue={typeof record.value === 'string' ? record.value : ''}
 							onBlur={(e) => handleProfileItemChange(record.key, 'value', e.target.value)}
 						/>

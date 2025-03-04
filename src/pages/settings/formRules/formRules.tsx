@@ -1,6 +1,7 @@
 import { useStorage } from '@src/hooks'
 import formProfileStorage from '@src/storage/formProfileStorage'
 import rulesStorage from '@src/storage/rulesStorage'
+import type { RuleItem } from '@src/types/settings'
 
 import { isValidRegex } from '@src/utils/Regex'
 import { Alert, Button, Input, InputRef, notification, Select, Table } from 'antd'
@@ -137,7 +138,7 @@ const formRules = () => {
 		})
 	}
 
-	const columns: ColumnsType<any> = [
+	const columns: ColumnsType<RuleItem & {key: string}> = [
 		{
 			title: 'Rule Name',
 			dataIndex: 'rule-name',

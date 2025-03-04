@@ -23,17 +23,14 @@
 		"field-rule": "(?:yy)|(?:byear)|(?:birth\\w?year)|(?:dob\\w?year)|(?:birth\\w*3)",
 		"site-rule": "(?:)"
 	},
-	
 	"full-street": {
 		"field-rule": "(?:street)|(?:addr)",
 		"site-rule": "(?:)"
 	},
-	
 	"full-name": {
 		"field-rule": "(?:fullname)|(?:full-name)|(?:name)",
 		"site-rule": "(?:)"
 	},
-	
 	"state": {
 		"field-rule": "(?:state)|(?:prov)|(?:region)",
 		"site-rule": "(?:)"
@@ -44,41 +41,69 @@
 	},
 	
 	"user-name": {
-		"field-rule": "(?:(?:username)|(?:login)|(?:user_id)|(?:membername))(?!\\w*pass)",
+		"field-rule": "(?:username)",
 		"site-rule": "(?:)"
 	},
 	"title": {
-		"field-rule": "(?:prefix[\\w\\s]*name)|(?:name[\\w\\s]*prefix)|(?:title)",
+		"field-rule": "(?:title)",
 		"site-rule": "(?:)"
 	},
 	"gender": {
 		"field-rule": "(?:gender)|(?:sex)",
 		"site-rule": "(?:)"
 	},
-	
 	"lang": {
 		"field-rule": "lang",
 		"site-rule": "(?:)"
 	},
 	"age": {
-		"field-rule": "age",
-		"site-rule": "(?:)"
-	},
-	
-	"occupation": {
-		"field-rule": "(?:occupation)|(?:job)",
+		"field-rule": "(?:age)",
 		"site-rule": "(?:)"
 	},
 	"phone": {
+		"field-rule": "(?:phone)",
+		"site-rule": "(?:)"
+	},
+	"phone-number": {
 		"field-rule": "(?:phone)|(?:tel)|(?:phon)",
 		"site-rule": "(?:)"
 	},
-	
-	"comment": {
-		"field-rule": "(?:commnt)|(?:comment)|(?:description)",
+	"location": {
+		"field-rule": "(?:Current location)|(?:Current location)",
 		"site-rule": "(?:)"
 	},
-	
+	"cv": {
+		"field-rule": "(?:cv)|(?:resume)",
+		"site-rule": "(?:)"
+	},
+	"coverletter": {
+		"field-rule": "(?:cover)",
+		"site-rule": "(?:)"
+	},
+	"about-me": {
+		"field-rule": "(?:comment)|(?:description)|(?:aboutMe)",
+		"site-rule": "(?:)"
+	},
+	"flexible": {
+		"field-rule": "(?:flexible)",
+		"site-rule": "(?:)"
+	},
+	"salary": {
+		"field-rule": "(?:salary)",
+		"site-rule": "(?:)"
+	},
+	"education": {
+		"field-rule": "(?:education)",
+		"site-rule": "(?:)"
+	},
+	"notice-period": {
+		"field-rule": "(?:notice)",
+		"site-rule": "(?:)"
+	},
+	"agreement": {
+		"field-rule": "(?:agreement)",
+		"site-rule": "(?:)"
+	},
 	"first-name": {
 		"field-rule": "(?:fname)|(?:first[\\w\\s]*name)|(?:frst[\\w\\s]*name)|(?:name[\\w\\s]*first)",
 		"site-rule": "(?:)"
@@ -91,17 +116,18 @@
 		"field-rule": "(?:lname)|(?:last[\\w\\s]*name)|(?:name[\\w\\s]*last)",
 		"site-rule": "(?:)"
 	},
-	
 	"name-suffix": {
 		"field-rule": "(?:suffix[\\w\\s]*name)|(?:name[\\w\\s]*suffix)",
 		"site-rule": "(?:)"
 	},
-	
+	"website": {
+		"field-rule": "(?:website)|(?:homepage)|(?:custom-question-website)",
+		"site-rule": "(?:)"
+	},
 	"email": {
 		"field-rule": "(?:mail)",
 		"site-rule": "(?:)"
 	},
-	
 	"street-line-1": {
 		"field-rule": "(?:(?:street)|(?:addr))\\w*1",
 		"site-rule": "(?:)"
@@ -126,13 +152,44 @@
 		"field-rule": "country",
 		"site-rule": "(?:)"
 	},
-	
 	"company": {
 		"field-rule": "company",
 		"site-rule": "(?:)"
 	},
 	"homepage": {
-		"field-rule": "(?:web)|(?:homepage)|(?:www)|(?:url)",
+		"field-rule": "(?:homepage)",
+		"site-rule": "(?:)"
+	},
+	"phone-extension": {
+		"field-rule": "(?:homepage)",
+		"site-rule": "(?:)"
+	},
+	"How did you hear about?": {
+		"field-rule": "(?=.*hear)(?=.*about).*",
+		"site-rule": "(?:)"
+	},
+	"Accept the Privacy Policy": {
+		"field-rule": "(?:agreement)|(?:Privacy)",
+		"site-rule": "(?:)"
+	},
+	"Bachelor's Degree": {
+		"field-rule": "(?:degree)|(?:bachelor)",
+		"site-rule": "(?:)"
+	},
+	"require visa": {
+		"field-rule": "(?:visa)",
+		"site-rule": "(?:)"
+	},
+	"legally": {
+		"field-rule": "(?:legally)",
+		"site-rule": "(?:)"
+	},
+	"Have you ever worked": {
+		"field-rule": "(?:have you ever worked)",
+		"site-rule": "(?:)"
+	},
+	"Phone Extension": {
+		"field-rule": "(?:phone Extension)",
 		"site-rule": "(?:)"
 	}
 }
