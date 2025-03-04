@@ -32,30 +32,33 @@ const formRules = () => {
 		})
 	}
 	
-	const uniqueKeys = Array.from(
-		new Set(
-			Object.values(profiles).flatMap((profile) => Object.keys(profile))
-		)
-	)
+	const allProfiles = Object.values(profiles).reduce((acc, profile) => {
+		return { ...acc, ...profile };
+	}, {});
+	const uniqueKeys = Array.from(new Set(Object.keys(allProfiles)))
 	const filteredKeys = uniqueKeys.filter((key) => !rulesData.hasOwnProperty(key))
 	const rulesNameOptions = filteredKeys.map((key) => ({
 		value: key,
 		label: key
 	}))
+	console.log("allProfiles:", allProfiles)
+	console.log("rulesData:", rulesData)
 	
 	const tableData = Object.keys(rulesData).map((key) => ({
 		key,
 		['site-rule']: rulesData[key]['site-rule'],
 		['field-rule']: rulesData[key]['field-rule'],
 		['rule-name']: key,
-		type: profiles[key]['type']
+		type: allProfiles?.[key]?.['type'] || typeOption.Text
 	}))
 	console.log("[formRules tableData]:", tableData)
 	
 	const handleChange = async (recordKey: string, field: RuleField, value: string) => {
 		const prev = await rulesStorage.get()
-		let newRules = { ...prev }
-		
+		let newRules = {
+			...prev,
+			type: allProfiles?.[recordKey]?.['type'] || typeOption.Text
+		}
 		if (field === 'rule-name') {
 			if (recordKey === value) return
 			if (newRules[recordKey]) {
@@ -79,7 +82,7 @@ const formRules = () => {
 			if (newRules[recordKey]) {
 				newRules[recordKey] = {
 					...newRules[recordKey],
-					[field]: value
+					[field]: value,
 				}
 			}
 		}
@@ -143,7 +146,7 @@ const formRules = () => {
 		})
 	}
 	
-	const columns: ColumnsType<RuleItem & { key: string }> = [
+	const columns: ColumnsType<Omit<RuleItem, 'type'> & { key: string }> = [
 		{
 			title: 'Rule Name',
 			dataIndex: 'rule-name',
