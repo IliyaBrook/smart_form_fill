@@ -1,4 +1,4 @@
-function findKeysByValue<T extends Record<string, any>>(
+export function findKeysByValue<T extends Record<string, any>>(
 	obj: Record<string, T>,
 	searchValue: any,
 	searchKeys: (keyof T)[] = ['value', 'name']
@@ -16,5 +16,3 @@ function findKeysByValue<T extends Record<string, any>>(
 	}
 	return matchingKeys;
 }
-
-export default findKeysByValue;

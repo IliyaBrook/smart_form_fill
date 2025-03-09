@@ -4,11 +4,9 @@ import { useStorage } from '@src/hooks'
 import { themeStorage } from '@src/storage'
 import formProfileStorage from '@src/storage/formProfileStorage'
 import type { Theme } from '@src/types/storage'
-import { cn } from '@src/utils/cn'
-import { navigateToTab, navigateToUrl } from '@src/utils/navigateUtils'
-import { Button, Divider, Select, Space } from 'antd'
+import { cn, navigateToTab, navigateToUrl } from '@utils'
+import { Button, Select, Space } from 'antd'
 import React from 'react'
-
 
 const Popup = () => {
 	const theme: Theme = useStorage(themeStorage)
@@ -27,7 +25,7 @@ const Popup = () => {
 		chrome.tabs
 			.query({ active: true, currentWindow: true })
 			.then(tabs => {
-				if (!tabs?.[0]) return
+				if (!tabs?.[0]?.id) return
 				const currentTabId = tabs[0].id
 				chrome.tabs.sendMessage(currentTabId, { action: 'fillForm' }, response => {
 					if (chrome.runtime.lastError) {

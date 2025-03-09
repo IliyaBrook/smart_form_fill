@@ -1,16 +1,14 @@
-import { CheckSquareOutlined, UploadOutlined } from '@ant-design/icons'
+import Swal from 'sweetalert2'
+import React, { useEffect, useState } from 'react'
+import type { ColumnsType } from 'antd/es/table'
+import { InputFieldOptions, type ProfileItem, typeOption } from '@src/types/settings'
+import { Button, Input, message, Select, Table, Upload, type UploadProps } from 'antd'
+import { UploadOutlined } from '@ant-design/icons'
 import DefaultProfileTooltip from '@pages/settings/formProfile/defaultProfileTooltip'
 import TextArea from '@src/components/TextArea'
 import { useStorage } from '@src/hooks'
 import formProfileStorage from '@src/storage/formProfileStorage'
-import { InputFieldOptions, type InputFieldType, type ProfileItem, typeOption } from '@src/types/settings'
-// import { InputFieldOptions, type ProfileItem } from '@src/types/settings'
-import findAndGroupDuplicates from '@src/utils/findAndGroupDuplicates'
-import findKeysByValue from '@src/utils/findKeyByValue'
-import { Button, Input, message, Select, Table, Upload, type UploadProps } from 'antd'
-import type { ColumnsType } from 'antd/es/table'
-import React, { useEffect, useState } from 'react'
-import Swal from 'sweetalert2'
+import { findAndGroupDuplicates, findKeysByValue } from '@utils'
 
 const FormProfile = () => {
 	const { profiles, profileNames, activeProfile } = useStorage(formProfileStorage)

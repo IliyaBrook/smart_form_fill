@@ -1,13 +1,13 @@
+// noinspection ES6PreferShortImport
+import { colorLog } from '../../../utils/defaultUtils/utils'
 import * as fs from "fs";
 import * as path from "path";
-import colorLog from "../log";
 import ManifestParser from "../manifest-parser";
 import type { PluginOption } from "vite";
-
 const { resolve } = path;
-
-const distDir = resolve(__dirname, "..", "..", "..", "dist");
-const publicDir = resolve(__dirname, "..", "..", "..", "public");
+const rootDir = process.cwd();
+const distDir = resolve(rootDir, "dist");
+const publicDir = resolve(rootDir, "public");
 
 export default function makeManifest(
   manifest: chrome.runtime.ManifestV3,

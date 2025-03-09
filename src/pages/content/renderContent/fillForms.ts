@@ -1,8 +1,5 @@
 import type { InputFieldType, Profile, RulesData } from '@src/types/settings'
-import getElementsByXPath from '@src/utils/getElementsByXPath'
-import { safeRegex } from '@src/utils/Regex'
-import { changeElement, formatValue, getId, grabInputs, inspectElement } from './formUtils'
-
+import { changeElement, formatValue, getElementsByXPath, getId, grabInputs, inspectElement, safeRegex } from '@utils'
 
 function fillForms(profile: Profile, rulesData: RulesData) {
 	const mode = 'insert'
@@ -189,11 +186,6 @@ function fillForms(profile: Profile, rulesData: RulesData) {
 					content: string;
 				}).content
 				const rule = applicableRules.find((rule) => rule.name === key)
-				console.log('[key]:', key)
-				console.log('[rawValue]:', rawValue)
-				console.log('[value]:', value)
-				console.log('[rule]:', rule)
-				
 				const elementText = element.outerHTML.toLowerCase()
 				if (element instanceof HTMLInputElement) {
 					if (element.type === 'radio' && rule.type === 'radio') {

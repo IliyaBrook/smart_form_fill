@@ -1,13 +1,13 @@
-interface FindDuplicatesResult<T> {
+interface IFindDuplicatesResult<T> {
 	uniqueObject: Record<string, T>;
 	duplicateKeys: string[];
 	duplicates: Record<string, T[]>;
 }
 
-function findAndGroupDuplicates<T>(
+export function findAndGroupDuplicates<T>(
 	object: Record<string, T>,
 	keyExtractor: (item: T) => string
-): FindDuplicatesResult<T> {
+): IFindDuplicatesResult<T> {
 	const uniqueObject: Record<string, T> = {};
 	const duplicates: Record<string, T[]> = {};
 	
@@ -26,5 +26,3 @@ function findAndGroupDuplicates<T>(
 	
 	return { uniqueObject, duplicateKeys: Object.keys(duplicates), duplicates };
 }
-
-export default findAndGroupDuplicates;

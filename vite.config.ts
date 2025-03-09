@@ -1,10 +1,10 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path, { resolve } from "path";
-import makeManifest from "./src/utils/plugins/make-manifest";
-import customDynamicImport from "./src/utils/plugins/custom-dynamic-import";
-import addHmr from "./src/utils/plugins/add-hmr";
-import watchRebuild from "./src/utils/plugins/watch-rebuild";
+import makeManifest from "./src/utils/defaultUtils/plugins/make-manifest";
+import customDynamicImport from "./src/utils/defaultUtils/plugins/custom-dynamic-import";
+import addHmr from "./src/utils/defaultUtils/plugins/add-hmr";
+import watchRebuild from "./src/utils/defaultUtils/plugins/watch-rebuild";
 import manifest from "./manifest";
 
 const rootDir = resolve(__dirname);
@@ -14,12 +14,10 @@ const assetsDir = resolve(srcDir, "assets");
 const outDir = resolve(rootDir, "dist");
 const publicDir = resolve(rootDir, "public");
 const nodeModulesDir = resolve(rootDir, "node_modules");
+const projectUtilsDir = resolve(srcDir, "utils", "projectUtils");
 
 const isDev = process.env.__DEV__ === "true";
 const isProduction = !isDev;
-
-// ENABLE HMR IN BACKGROUND SCRIPT
-const enableHmrInBackgroundScript = true;
 
 export default defineConfig({
   css: {
@@ -34,6 +32,7 @@ export default defineConfig({
       "@src": srcDir,
       "@assets": assetsDir,
       "@pages": pagesDir,
+      "@utils": projectUtilsDir,
     },
   },
   plugins: [
@@ -43,7 +42,7 @@ export default defineConfig({
       contentScriptCssKey: regenerateCacheInvalidationKey(),
     }),
     customDynamicImport(),
-    addHmr({ background: enableHmrInBackgroundScript, view: true }),
+    addHmr({ background: isDev, view: true }),
     watchRebuild(),
     
   ],
@@ -87,6 +86,9 @@ export default defineConfig({
       },
     },
   },
+  define: {
+    __IS_DEV__: JSON.stringify(isDev),
+  }
 });
 
 function firstUpperCase(str: string) {

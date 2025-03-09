@@ -1,7 +1,8 @@
-import { cn } from '@src/utils/cn'
+import { cn } from '@utils'
+import { Input } from 'antd'
 import type { TextAreaProps } from 'antd/lib/input/TextArea'
-import React, { useEffect, useLayoutEffect, useRef } from 'react'
-import { Input } from 'antd';
+import React, { useLayoutEffect, useRef } from 'react'
+
 const { TextArea:AntTextArea } = Input;
 
 const TextArea: React.FC<TextAreaProps> = (props) => {

@@ -1,4 +1,4 @@
-function getElementsByXPath(xpath: string, context?:Document | Element): HTMLElement[] {
+export function getElementsByXPath(xpath: string, context?:Document | Element): HTMLElement[] {
 	try {
 		const result = document.evaluate(
 			xpath,
@@ -21,5 +21,3 @@ function getElementsByXPath(xpath: string, context?:Document | Element): HTMLEle
 		return elements;
 	}catch {}
 }
-
-export default getElementsByXPath;

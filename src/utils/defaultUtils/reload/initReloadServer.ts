@@ -1,6 +1,6 @@
 import { WebSocket, WebSocketServer } from "ws";
 import chokidar from "chokidar";
-import { debounce } from "./utils";
+import { debounce } from "../utils";
 import {
   LOCAL_RELOAD_SOCKET_PORT,
   LOCAL_RELOAD_SOCKET_URL,

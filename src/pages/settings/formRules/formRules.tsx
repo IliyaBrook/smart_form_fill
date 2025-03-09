@@ -1,12 +1,11 @@
+import React, { useEffect, useRef, useState } from 'react'
 import { useStorage } from '@src/hooks'
 import formProfileStorage from '@src/storage/formProfileStorage'
 import rulesStorage from '@src/storage/rulesStorage'
 import { type RuleItem, typeOption } from '@src/types/settings'
-
-import { isValidRegex } from '@src/utils/Regex'
 import { Alert, Button, Input, InputRef, notification, Select, Table } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
-import React, { useEffect, useRef, useState } from 'react'
+import { isValidRegex } from '@utils'
 
 type RuleField = 'field-rule' | 'site-rule' | 'rule-name';
 

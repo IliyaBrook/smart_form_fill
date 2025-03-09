@@ -10,8 +10,8 @@
   "scripts": {
     "build": "tsc --noEmit && vite build",
     "build:watch": "cross-env __DEV__=true vite build -w",
-    "build:hmr": "node src/utils/reload/rollup.config.mjs",
-    "wss": "node src/utils/reload/initReloadServer.js",
+    "build:hmr": "node src/utils/defaultUtils/reload/rollup.config.mjs",
+    "wss": "node src/utils/defaultUtils/reload/initReloadServer.js",
     "dev": "npm run build:hmr && (run-p wss build:watch)"
   },
   "type": "module",

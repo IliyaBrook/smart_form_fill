@@ -4,12 +4,12 @@ declare namespace chrome {
   export default Chrome;
 }
 
-declare module "virtual:reload-on-update-in-background-script" {
+declare module "@src/global" {
   export const reloadOnUpdate: (watchPath: string) => void;
   export default reloadOnUpdate;
 }
 
-declare module "virtual:reload-on-update-in-view" {
+declare module "@src/global" {
   const refreshOnUpdate: (watchPath: string) => void;
   export default refreshOnUpdate;
 }
@@ -35,3 +35,6 @@ declare module "*.json" {
   const content: string;
   export default content;
 }
+
+
+
