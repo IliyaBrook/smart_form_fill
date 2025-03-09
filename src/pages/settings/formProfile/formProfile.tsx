@@ -285,7 +285,7 @@ const FormProfile = () => {
 			dataIndex: 'value',
 			key: 'value',
 			render: (_, record) => {
-				if (record.type === typeOption.Text) {
+				if (record.type === typeOption.Text || record.type === typeOption.Select) {
 					return (
 						<Input
 							key={`${record.key}_text`}
@@ -306,7 +306,18 @@ const FormProfile = () => {
 							✔
 						</div>
 					)
-				} else if (record.type === typeOption.Boolean || record.type === typeOption.Select) {
+				}else if (record.type === typeOption.Radio) {
+					handleProfileItemChange(record.key, 'value', null);
+					return (
+						<div
+							className="flex items-center justify-center w-6 h-6 border-[0.5px] rounded-full"
+							key={record.key}
+						>
+							<div className="w-3 h-3 bg-black rounded-full"></div>
+						</div>
+					)
+				}
+				else if (record.type === typeOption.Boolean) {
 					return (
 						<Select
 							className="w-fit"

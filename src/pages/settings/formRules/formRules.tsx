@@ -41,8 +41,6 @@ const formRules = () => {
 		value: key,
 		label: key
 	}))
-	console.log("allProfiles:", allProfiles)
-	console.log("rulesData:", rulesData)
 	
 	const tableData = Object.keys(rulesData).map((key) => ({
 		key,
@@ -51,13 +49,16 @@ const formRules = () => {
 		['rule-name']: key,
 		type: allProfiles?.[key]?.['type'] || typeOption.Text
 	}))
-	console.log("[formRules tableData]:", tableData)
 	
 	const handleChange = async (recordKey: string, field: RuleField, value: string) => {
 		const prev = await rulesStorage.get()
 		let newRules = {
 			...prev,
-			type: allProfiles?.[recordKey]?.['type'] || typeOption.Text
+			[recordKey]: {
+				...(prev[recordKey] || { 'field-rule': '', 'site-rule': '', 'rule-name': recordKey }),
+				type: allProfiles?.[recordKey]?.['type'] || typeOption.Text,
+				'rule-name': recordKey
+			}
 		}
 		if (field === 'rule-name') {
 			if (recordKey === value) return

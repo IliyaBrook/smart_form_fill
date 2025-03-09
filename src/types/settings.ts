@@ -6,6 +6,7 @@ export enum typeOption {
 	Boolean = 'boolean',
 	None = 'none',
 	Select = 'select',
+	Radio = 'radio'
 }
 
 export type InputFieldType = (typeof typeOption)[keyof typeof typeOption];
