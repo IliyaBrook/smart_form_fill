@@ -25,6 +25,8 @@ export default function Content() {
 					}
 					const profile = profiles[activeProfile]
 					fillForms(profile, rulesData)
+					sendResponse({ message: 'ok' })
+					return true
 				}
 			}
 			chrome.runtime.onMessage.addListener(listener)

@@ -76,7 +76,9 @@ export default defineConfig({
         settings: resolve(pagesDir, "settings", "index.html"),
         popup: resolve(pagesDir, "popup", "index.html"),
         darkThem: resolve(nodeModulesDir, "antd/dist/antd.dark.css"),
-        lightThem: resolve(nodeModulesDir, "antd/dist/antd.css")
+        lightThem: resolve(nodeModulesDir, "antd/dist/antd.css"),
+        Global: resolve(srcDir, "global.css"),
+        
       },
       output: {
         entryFileNames: "src/pages/[name]/index.js",
