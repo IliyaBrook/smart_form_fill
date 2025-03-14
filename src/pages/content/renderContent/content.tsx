@@ -25,8 +25,6 @@ export default function Content() {
 					}
 					const profile = profiles[activeProfile]
 					fillForms(profile, rulesData)
-					// sendResponse({ message: 'ok' })
-					// return true
 				}
 			}
 			chrome.runtime.onMessage.addListener(listener)
@@ -37,7 +35,6 @@ export default function Content() {
 		}catch (e) {
 			console.log('fill form listener error:', e)
 		}
-	}, [])
-	// rulesData, profiles, activeProfile
+	}, [rulesData, profiles, activeProfile])
 	return null
 }
