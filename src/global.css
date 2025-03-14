@@ -19,3 +19,11 @@ body {
 	-moz-osx-font-smoothing: grayscale;
 	position: relative;
 }
+
+#smart-fill-form-popup, #smart-fill-form-popup > div{
+	width: 380px!important;
+	height: 260px!important;
+}
+#smart-fill-form-settings{
+	width: 100%;
+}

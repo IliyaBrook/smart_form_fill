@@ -1,6 +1,5 @@
 import { WebSocketServer } from 'ws';
 import chokidar from 'chokidar';
-import { clearTimeout } from 'timers';
 
 function debounce(callback, delay) {
     let timer;

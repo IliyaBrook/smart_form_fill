@@ -10,6 +10,6 @@ declare const __IS_DEV__: boolean;
 if (__IS_DEV__) {
 	try {
 		reloadOnUpdate("pages/background");
-		reloadOnUpdate("pages/content/style.scss");
+		reloadOnUpdate("global.css.scss");
 	}catch {}
 }

@@ -30,6 +30,7 @@ const Popup = () => {
 				chrome.tabs.sendMessage(currentTabId, { action: 'fillForm' }, response => {
 					if (chrome.runtime.lastError) {
 						console.error('Error sending message:', chrome.runtime.lastError.message)
+						return
 					} else {
 						console.log('Response from content script:', response)
 					}
@@ -114,38 +115,6 @@ const Popup = () => {
 						FILL FORM
 					</Button>
 				</Space>
-			</div>
-			<div className='flex items-center justify-around h-full'>
-				{/* <Space> */}
-				{/* 	<Button */}
-				{/* 		type='default' */}
-				{/* 		size='middle' */}
-				{/* 		shape='round' */}
-				{/* 		onClick={() => { */}
-				{/* 			//@Todo implement "Extract roles" */}
-				{/* 		}} */}
-				{/* 	> */}
-				{/* 		Extract roles */}
-				{/* 	</Button> */}
-				{/* </Space> */}
-				{/* <Divider */}
-				{/* 	type='vertical' */}
-				{/* 	className='border h-[60%]' */}
-				{/* 	// style={{ borderWidth: '1px', height: '60%' }} */}
-				{/* /> */}
-				{/* <Space> */}
-				{/* 	<Button */}
-				{/* 		shape='round' */}
-				{/* 		type='default' */}
-				{/* 		size='middle' */}
-				{/* 		onClick={() => { */}
-				{/* 			//@Todo implement "Update Profile" */}
-				{/* 		}} */}
-				{/* 		// className="px-4 py-2 rounded shadow-sm" */}
-				{/* 	> */}
-				{/* 		Update Profile */}
-				{/* 	</Button> */}
-				{/* </Space> */}
 			</div>
 		</div>
 	)

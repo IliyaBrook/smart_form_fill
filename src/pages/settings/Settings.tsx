@@ -3,8 +3,8 @@ import FormRules from '@pages/settings/formRules/formRules'
 import GeneralSettings from '@pages/settings/generalSettings/generalSettings'
 import useTheme from '@src/hooks/useTheme'
 import { ConfigProvider, Tabs } from 'antd'
-import '@pages/global.css'
 import { useEffect, useState } from 'react'
+import "@src/global.css";
 
 const Settings = () => {
 	useTheme()
@@ -42,7 +42,7 @@ const Settings = () => {
 	
 	return (
 		<ConfigProvider>
-			<div className='px-4 py-2'>
+			<div className='px-4 py-2 w-full'>
 				<Tabs
 					key={`render-key-${activeTab}`}
 					defaultActiveKey={activeTab}

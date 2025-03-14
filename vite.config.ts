@@ -6,6 +6,9 @@ import customDynamicImport from "./src/utils/defaultUtils/plugins/custom-dynamic
 import addHmr from "./src/utils/defaultUtils/plugins/add-hmr";
 import watchRebuild from "./src/utils/defaultUtils/plugins/watch-rebuild";
 import manifest from "./manifest";
+import tailwindcssNesting from 'tailwindcss/nesting';
+import postcssNested from 'postcss-nested';
+
 
 const rootDir = resolve(__dirname);
 const srcDir = resolve(rootDir, "src");
@@ -15,15 +18,27 @@ const outDir = resolve(rootDir, "dist");
 const publicDir = resolve(rootDir, "public");
 const nodeModulesDir = resolve(rootDir, "node_modules");
 const projectUtilsDir = resolve(srcDir, "utils", "projectUtils");
+import autoprefixer from 'autoprefixer';
+import tailwindcss from 'tailwindcss';
 
 const isDev = process.env.__DEV__ === "true";
 const isProduction = !isDev;
 
 export default defineConfig({
   css: {
+    postcss:{
+      plugins:[
+        tailwindcssNesting(postcssNested),
+        tailwindcss(),
+        autoprefixer(),
+      ]
+    },
     preprocessorOptions: {
       less: {
         javascriptEnabled: true,
+      },
+      scss: {
+        additionalData: `@import "./src/global.scss";`,
       },
     },
   },
@@ -61,8 +76,7 @@ export default defineConfig({
         settings: resolve(pagesDir, "settings", "index.html"),
         popup: resolve(pagesDir, "popup", "index.html"),
         darkThem: resolve(nodeModulesDir, "antd/dist/antd.dark.css"),
-        lightThem: resolve(nodeModulesDir, "antd/dist/antd.css"),
-        contentStyle: resolve(pagesDir, "content", "style.scss"),
+        lightThem: resolve(nodeModulesDir, "antd/dist/antd.css")
       },
       output: {
         entryFileNames: "src/pages/[name]/index.js",

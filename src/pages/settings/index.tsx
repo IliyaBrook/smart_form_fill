@@ -6,9 +6,9 @@ refreshOnUpdate("pages/settings");
 
 
 function init() {
-  const appContainer = document.querySelector("#app-container");
+  const appContainer = document.querySelector("#smart-fill-form-settings");
   if (!appContainer) {
-    throw new Error("Can not find #app-container");
+    throw new Error("Can not find #smart-fill-form-settings");
   }
   const root = createRoot(appContainer);
   root.render(<Settings />);

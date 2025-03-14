@@ -10,6 +10,7 @@ if (__IS_DEV__) {
 }
 
 const root = document.createElement("div");
+root.id = "smart-fill-form-content";
 document.body.append(root);
 createRoot(root).render(<Content />);
 
