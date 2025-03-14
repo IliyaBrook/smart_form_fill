@@ -30,9 +30,6 @@
       "js": [
         "src/pages/content/index.js"
       ],
-      "css": [
-        "assets/css/contentStyle17415520335.chunk.css"
-      ],
       "all_frames": true
     }
   ],
