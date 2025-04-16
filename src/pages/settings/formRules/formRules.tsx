@@ -145,7 +145,7 @@ const formRules = () => {
 			return newRules
 		})
 	}
-	
+
 	const columns: ColumnsType<Omit<RuleItem, 'type'> & { key: string }> = [
 		{
 			title: 'Rule Name',
@@ -200,7 +200,7 @@ const formRules = () => {
 					<Input
 						ref={inputRefs.current[record.key]['field-rule']}
 						status={rowStatuses[record.key]?.['field-rule']}
-						defaultValue={record['field-rule']}
+						defaultValue={record['field-rule'] || `(?:${record['rule-name']})`}
 						onBlur={(event) => {
 							void handleChange(record.key, 'field-rule', event.target.value)
 						}}

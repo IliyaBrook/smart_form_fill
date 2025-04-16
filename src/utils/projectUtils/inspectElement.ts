@@ -1,7 +1,6 @@
 export function inspectElement(node: HTMLElement): string[] {
 	let results: string[] = []
 	const attributesToCheck = ['placeholder', 'data-testid', 'aria-label', 'title', 'name', 'id']
-	console.log('node:', node)
 	const one = (node: HTMLElement) => {
 		// Get input value if it's an input element
 		if (node instanceof HTMLInputElement) {
