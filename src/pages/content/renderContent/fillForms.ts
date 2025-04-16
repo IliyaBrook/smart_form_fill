@@ -47,12 +47,6 @@ function fillForms(profile: Profile, rulesData: RulesData) {
 		founds.set(input, arr)
 	}
 	
-	// Debug function to log string similarity matching
-	const logSimilarity = (text: string, key: string, similarity: number) => {
-		if (similarity > 0.4) { // Only log reasonably similar matches
-			console.log(`String similarity: "${text}" <-> "${key}" = ${similarity.toFixed(2)}`)
-		}
-	}
 	const decide = (input: Element, profile: Profile): string => {
 		const fileRules = Object.keys(profile).filter((key) => profile[key].type === 'file')
 		const arr = founds.get(input) || []
@@ -290,7 +284,6 @@ function fillForms(profile: Profile, rulesData: RulesData) {
 					if (!isAppropriateFieldType(key, input)) continue;
 
 					const similarity = stringSimilarity(text, key);
-					logSimilarity(text, key, similarity);
 
 					if (similarity >= 0.7) {
 						matches.push({
@@ -316,7 +309,6 @@ function fillForms(profile: Profile, rulesData: RulesData) {
 					if (!isAppropriateFieldType(key, input)) continue;
 
 					const similarity = stringSimilarity(text, name);
-					logSimilarity(text, name, similarity);
 
 					if (similarity >= 0.7) {
 						matches.push({
@@ -523,12 +515,6 @@ function fillForms(profile: Profile, rulesData: RulesData) {
 					name: string;
 					content: string;
 				}).content
-
-				// Skip if this value has been used too many times
-				if (isValueOverused(value)) {
-					console.log(`Skipping field because value "${value}" has been used too many times`);
-					return;
-				}
 
 				const rule = applicableRules.find((rule) => rule.name === key)
 				const elementText = element.outerHTML.toLowerCase()

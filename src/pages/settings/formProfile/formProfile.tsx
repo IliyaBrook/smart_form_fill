@@ -21,7 +21,7 @@ const FormProfile = () => {
 			setIsReady(true)
 		}, 800)
 	}, [])
-	console.log('profiles:', profiles)
+	
 	const currentProfile = profiles[activeProfile] ?? {}
 	
 	const tableData = Object.keys(currentProfile).map((key) => ({
